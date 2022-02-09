@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5152676633864261809}
   - component: {fileID: 5152676633865297605}
   - component: {fileID: 5146454523506360835}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Tiles_Rune_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}

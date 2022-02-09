@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7799777187651364325}
   - component: {fileID: 7799777187652371515}
   - component: {fileID: 7844661592891672901}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_CrackedRock_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}

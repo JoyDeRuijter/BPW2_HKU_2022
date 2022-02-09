@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 938344628349953070}
   - component: {fileID: 949775502442290984}
   - component: {fileID: 979646753873485174}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Floor_Grate_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

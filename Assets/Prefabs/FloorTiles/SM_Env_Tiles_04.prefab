@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2614980848512769867}
   - component: {fileID: 2614980848513767787}
   - component: {fileID: 2639963671560867747}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Tiles_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}

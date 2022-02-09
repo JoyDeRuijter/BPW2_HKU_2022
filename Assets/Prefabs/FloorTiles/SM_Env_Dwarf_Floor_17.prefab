@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6319425961911150516}
   - component: {fileID: 6311400067480764448}
   - component: {fileID: 6282028879409437740}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Dwarf_Floor_17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
