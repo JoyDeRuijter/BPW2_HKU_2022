@@ -1007,9 +1007,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSteps: 100
-  wayPoints: []
-  currentWayPoint: 0
   moveSpeed: 5
+  turnSpeed: 6
+  currentWayPoint: 0
   stoppedMoving: 0
 --- !u!1001 &400210017
 PrefabInstance:
@@ -2634,6 +2634,7 @@ MonoBehaviour:
   target: {fileID: 394776958}
   size: 10
   scrollSpeed: 150
+  distance: 30
 --- !u!20 &1687258584
 Camera:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class PlayerGridMovement : MonoBehaviour
     [Header ("Player Properties")]
     [SerializeField] private int maxSteps = 100;
     [SerializeField] private float moveSpeed = 5;
+    [SerializeField] private float turnSpeed = 6;
     
     [HideInInspector] public int currentWayPoint = 0;
     [HideInInspector] public bool stoppedMoving;
@@ -53,7 +54,16 @@ public class PlayerGridMovement : MonoBehaviour
         }
 
         Vector3 dir = (wayPointPosition - transform.position).normalized;
+        RotatePlayer();
         rb.MovePosition(transform.position + dir * moveSpeed * Time.deltaTime);
+    }
+
+    private void RotatePlayer()
+    {
+        Vector3 lookDirection = wayPointPosition - transform.position;
+        lookDirection.y = 0;
+        Quaternion rotation = Quaternion.LookRotation(lookDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
     }
 
     // Set the correct waypoint position for the current waypoint using the player offsets, so they are in the middle of the tile
