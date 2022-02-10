@@ -32,7 +32,7 @@ public class GridBehaviour : MonoBehaviour
 
         gridArray = new GameObject[rows, columns];
 
-        startX = (int)player.transform.position.x + 1;
+        startX = (int)(player.transform.position.x + 1);
         startY = (int)player.transform.position.z;
 
 
@@ -46,9 +46,11 @@ public class GridBehaviour : MonoBehaviour
     {
         if (player.stoppedMoving)
         {
-            startX = (int)player.transform.position.x + 1;
-            startY = (int)player.transform.position.z;
+            startX = endX;
+            startY = endY;
             path.Clear();
+            player.stoppedMoving = false;
+            Debug.Log("cleared path");
         }
 
         if (findDistance)
@@ -79,8 +81,6 @@ public class GridBehaviour : MonoBehaviour
     private void SetDistance()
     { 
         InitialSetup();
-
-        int[] testArray = new int[rows * columns];
         for (int step = 1; step < rows * columns; step++)
         {
             foreach (GameObject obj in gridArray)

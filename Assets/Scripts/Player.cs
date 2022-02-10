@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     private float xOffset = -0.5f;
     private float zOffset = 0.5f;
     [HideInInspector] public bool stoppedMoving;
+    private Vector3 wayPointPosition = Vector3.zero;
 
     #endregion
 
@@ -26,23 +27,22 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Movement();
+        if(stoppedMoving)
+        {
+            EmptyWayPoints();
+            currentWayPoint = 0;
+            Debug.Log("emptied way points");
+        }
     }
 
     private void Movement()
     {
-        bool arrayIsEmpty = true;
-        for (int i = 0; i < wayPoints.Length; i++)
-        {
-            if(wayPoints[i] != null)
-                arrayIsEmpty = false;
-            break;
-        }
-        if (arrayIsEmpty)
+        if (wayPoints[0] == null)
             return;
 
-        Vector3 wayPointPosition = new Vector3((wayPoints[currentWayPoint].position.x + xOffset), wayPoints[currentWayPoint].position.y, (wayPoints[currentWayPoint].position.z + zOffset));
+        wayPointPosition.Set((wayPoints[currentWayPoint].position.x + xOffset), wayPoints[currentWayPoint].position.y, (wayPoints[currentWayPoint].position.z + zOffset));
 
-        if (!arrayIsEmpty && Vector3.Distance(transform.position, wayPointPosition) < 0.025)
+        if (Vector3.Distance(transform.position, wayPointPosition) < 0.025)
         {
             if (wayPoints[currentWayPoint + 1] == null)
             {
@@ -64,12 +64,6 @@ public class Player : MonoBehaviour
     {
         int indexCounter = 0;
 
-        for (int i = 0; i < wayPoints.Length; i++)
-        {
-            if (wayPoints[i] != null)
-                wayPoints[i] = null;
-        }
-
         if (pathTransforms.Count > maxSteps)
         { 
             Debug.Log("Waypoint can't be reached with current maxSteps");
@@ -80,6 +74,17 @@ public class Player : MonoBehaviour
         {
             wayPoints[indexCounter] = t;
             indexCounter++;
+        }
+    }
+
+    private void EmptyWayPoints()
+    {
+        for (int i = 0; i < wayPoints.Length; i++)
+        {
+            if (wayPoints[i] != null)
+                wayPoints[i] = null;
+            else
+                break;
         }
     }
 }
