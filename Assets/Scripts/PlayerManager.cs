@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour
 
     #region Variables
 
+    [Header ("Player Reference")]
     public GameObject player;
 
     #endregion
