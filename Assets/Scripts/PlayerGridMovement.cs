@@ -61,7 +61,7 @@ public class PlayerGridMovement : MonoBehaviour
     private void RotatePlayer()
     {
         Vector3 lookDirection = wayPointPosition - transform.position;
-        lookDirection.y = 0;
+        lookDirection.y = 0.0001f;
         Quaternion rotation = Quaternion.LookRotation(lookDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
     }
