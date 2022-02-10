@@ -7,23 +7,34 @@ public class GridBehaviour : MonoBehaviour
     #region Variables
 
     public bool findDistance = false;
-    public int rows = 10;
-    public int columns = 10;
+    public int rows;
+    public int columns;
     public int scale = 1;
     public GameObject gridPrefab;
     public Vector3 leftBottomLocation = Vector3.zero;
     public GameObject[,] gridArray;
-    public int startX = 0;
-    public int startY = 0;
+    public int startX;
+    public int startY;
     public int endX = 2;
     public int endY = 2;
     public List<GameObject> path = new List<GameObject>();
+    
+    private List<Transform> pathTransforms = new List<Transform>();
+    private PlayerManager playerManager;
+    private Player player;
 
     #endregion
 
     private void Awake()
     {
+        playerManager = PlayerManager.instance;
+        player = playerManager.player.GetComponent<Player>();
+
         gridArray = new GameObject[rows, columns];
+
+        startX = (int)player.transform.position.x + 1;
+        startY = (int)player.transform.position.z;
+
 
         if (gridPrefab)
             GenerateGrid();
@@ -33,21 +44,30 @@ public class GridBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (player.stoppedMoving)
+        {
+            startX = (int)player.transform.position.x + 1;
+            startY = (int)player.transform.position.z;
+            path.Clear();
+        }
+
         if (findDistance)
         { 
             SetDistance();
             SetPath();
+            SetPathTransforms();
+            player.SetWayPoints(pathTransforms);
             findDistance = false;
         }
     }
 
     private void GenerateGrid()
     {
-        for(int i = 0; i < columns; i++)
+        for (int i = 0; i < rows; i++)
         {
-            for (int j = 0; j < rows; j++)
-            { 
-                GameObject obj = Instantiate(gridPrefab, new Vector3(leftBottomLocation.x+scale*i, leftBottomLocation.y, leftBottomLocation.z+scale*j), Quaternion.identity);
+            for (int j = 0; j < columns; j++)
+            {
+                GameObject obj = Instantiate(gridPrefab, new Vector3(leftBottomLocation.x + scale * i, leftBottomLocation.y, leftBottomLocation.z + scale * j), Quaternion.identity);
                 obj.transform.SetParent(gameObject.transform);
                 obj.GetComponent<GridStat>().x = i;
                 obj.GetComponent<GridStat>().y = j;
@@ -59,8 +79,7 @@ public class GridBehaviour : MonoBehaviour
     private void SetDistance()
     { 
         InitialSetup();
-        int x = startX;
-        int y = startY;
+
         int[] testArray = new int[rows * columns];
         for (int step = 1; step < rows * columns; step++)
         {
@@ -178,5 +197,15 @@ public class GridBehaviour : MonoBehaviour
             }
         }
         return list[indexNumber];
+    }
+
+    private void SetPathTransforms()
+    {
+        pathTransforms.Clear();
+
+        foreach (GameObject obj in path)
+            pathTransforms.Add(obj.transform);
+
+        pathTransforms.Reverse();
     }
 }
