@@ -36,7 +36,7 @@ public class PlayerGridMovement : MonoBehaviour
 
         wayPointPosition.Set((wayPoints[currentWayPoint].position.x + xOffset), wayPoints[currentWayPoint].position.y, (wayPoints[currentWayPoint].position.z + zOffset));
 
-        if (Vector3.Distance(transform.position, wayPointPosition) < 0.025)
+        if (Vector3.Distance(transform.position, wayPointPosition) < 0.04)
         {
             if (wayPoints[currentWayPoint + 1] == null)
             {

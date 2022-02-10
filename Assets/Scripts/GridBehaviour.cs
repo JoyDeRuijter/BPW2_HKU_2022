@@ -21,14 +21,14 @@ public class GridBehaviour : MonoBehaviour
     
     private List<Transform> pathTransforms = new List<Transform>();
     private PlayerManager playerManager;
-    private PlayerGridMovement player;
+    [SerializeField] private PlayerGridMovement player;
 
     #endregion
 
     private void Awake()
     {
         playerManager = PlayerManager.instance;
-        player = playerManager.player.GetComponent<PlayerGridMovement>();
+        //player = playerManager.player.GetComponent<PlayerGridMovement>();
 
         gridArray = new GameObject[rows, columns];
 
@@ -44,6 +44,14 @@ public class GridBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if(endX > rows - 1)
+            endX = Mathf.Clamp(endX, 0, rows - 1);
+
+        if(endY > columns - 1)
+            endY = Mathf.Clamp(endY, 0, columns - 1);
+
+        Debug.Log("end X: " + endX + " - " + "end Y: " + endY);
+
         if (player.stoppedMoving)
         {
             DimAllPaths();
@@ -97,8 +105,9 @@ public class GridBehaviour : MonoBehaviour
     private void SetPath()
     {
         int step;
-        int x = endX;
+        int x = endX; 
         int y = endY;
+        Debug.Log(x + " - " + y);
         List<GameObject> tempList = new List<GameObject>();
         path.Clear();
         if (gridArray[endX, endY] && gridArray[endX, endY].GetComponent<GridStat>().visited > 0)
@@ -142,16 +151,16 @@ public class GridBehaviour : MonoBehaviour
 
     private bool TestDirection(int x, int y, int step, int direction)
     {
-        // int direction tells which case to use: 1 = up, 2 = right, 3 = down, 4 = left
+        //1 = up, 2 = right, 3 = down, 4 = left
         switch (direction)
         {
             case 1:
-                if (y + 1 < rows && gridArray[x, y + 1] && gridArray[x, y + 1].GetComponent<GridStat>().visited == step)
+                if (y + 1 < columns && gridArray[x, y + 1] && gridArray[x, y + 1].GetComponent<GridStat>().visited == step)
                     return true;
                 else 
                     return false;
             case 2:
-                if (x + 1 < columns && gridArray[x + 1, y] && gridArray[x + 1, y].GetComponent<GridStat>().visited == step)
+                if (x + 1 < rows && gridArray[x + 1, y] && gridArray[x + 1, y].GetComponent<GridStat>().visited == step)
                     return true;
                 else
                     return false;
@@ -161,10 +170,7 @@ public class GridBehaviour : MonoBehaviour
                 else
                     return false;
             case 4:
-                if (x - 1 > -1 && gridArray[x - 1, y] && gridArray[x - 1, y].GetComponent<GridStat>().visited == step)
-                    return true;
-                else
-                    return false;
+                return (x - 1 > -1 && gridArray[x - 1, y] && gridArray[x - 1, y].GetComponent<GridStat>().visited == step);
         }
         return false;
     }

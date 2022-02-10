@@ -525,16 +525,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   findDistance: 0
-  rows: 10
-  columns: 10
+  rows: 20
+  columns: 60
   scale: 1
   gridPrefab: {fileID: 7769641577598062520, guid: 21553bc7156edc542a8b3cbdd906eedb, type: 3}
   leftBottomLocation: {x: 0, y: 0, z: 0}
   startX: 0
   startY: 0
-  endX: 8
-  endY: 5
+  endX: 5
+  endY: 8
   path: []
+  player: {fileID: 394776965}
 --- !u!4 &148363534
 Transform:
   m_ObjectHideFlags: 0
@@ -1010,7 +1011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a91a7c9408e8e44e9f9b2b271b5ec80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSteps: 200
+  maxSteps: 250
   wayPoints: []
   currentWayPoint: 0
   moveSpeed: 5
