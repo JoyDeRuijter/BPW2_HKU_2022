@@ -50,6 +50,8 @@ public class GridBehaviour : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(path.Count);
+
         if(endX > rows - 1)
             endX = Mathf.Clamp(endX, 0, rows - 1);
 
@@ -57,17 +59,9 @@ public class GridBehaviour : MonoBehaviour
             endY = Mathf.Clamp(endY, 0, columns - 1);
 
         if (player.stoppedMoving)
-        {
-            DimAllPaths();
-            player.EmptyWayPoints();
-            player.currentWayPoint = 0;
-            startX = endX;
-            startY = endY;
-            path.Clear();
-            player.stoppedMoving = false;
-        }
+            ResetGrid();
 
-        OnClick();
+        findDistance = OnClick();
 
         if (findDistance)
         { 
@@ -93,6 +87,17 @@ public class GridBehaviour : MonoBehaviour
                 gridArray[i, j] = obj;
             }
         }
+    }
+
+    private void ResetGrid()
+    {
+        DimAllPaths();
+        player.EmptyWayPoints();
+        player.currentWayPoint = 0;
+        startX = endX;
+        startY = endY;
+        path.Clear();
+        player.stoppedMoving = false;
     }
 
     private void SetDistance()
@@ -244,8 +249,11 @@ public class GridBehaviour : MonoBehaviour
         gridArray[startX, startY].GetComponent<GridStat>().SetDefaultMaterial();
     }
 
-    private void OnClick()
+    private bool OnClick()
     {
+        if (path.Count != 0)
+            return false;
+
         if (Input.GetMouseButtonDown(0))
         { 
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -268,9 +276,11 @@ public class GridBehaviour : MonoBehaviour
 
                     endX = currentClickedTileStat.x;
                     endY = currentClickedTileStat.y;
-                    findDistance = true;
+
+                    return true;
                 }
             }
         }
+        return false;
     }
 }
