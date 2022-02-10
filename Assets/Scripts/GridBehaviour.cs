@@ -50,8 +50,6 @@ public class GridBehaviour : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(path.Count);
-
         if(endX > rows - 1)
             endX = Mathf.Clamp(endX, 0, rows - 1);
 
@@ -118,7 +116,6 @@ public class GridBehaviour : MonoBehaviour
         int step;
         int x = endX; 
         int y = endY;
-        Debug.Log(x + " - " + y);
         List<GameObject> tempList = new List<GameObject>();
         path.Clear();
         if (gridArray[endX, endY] && gridArray[endX, endY].GetComponent<GridStat>().visited > 0)
