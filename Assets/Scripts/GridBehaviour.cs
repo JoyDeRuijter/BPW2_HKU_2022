@@ -6,43 +6,42 @@ public class GridBehaviour : MonoBehaviour
 {
     #region Variables
 
-    public bool findDistance = false;
-    public int rows;
-    public int columns;
-    public int scale = 1;
-    public GameObject gridPrefab;
-    public Vector3 leftBottomLocation = Vector3.zero;
-    public GameObject[,] gridArray;
-    public int startX;
-    public int startY;
-    public int endX = 2;
-    public int endY = 2;
-    public List<GameObject> path = new List<GameObject>();
+    [Header("Grid Properties")]
+    [SerializeField] private int rows;
+    [SerializeField] private int columns;
+    [SerializeField] private int scale = 1;
+    [SerializeField] private GameObject gridTile;
+    [SerializeField] private Vector3 leftBottomLocation = Vector3.zero;
+
+    [Header("References")]
+    [Space(10)]
+    [SerializeField] private PlayerGridMovement playerGridMovement;
+    [SerializeField] private new Camera camera;
     
-    private List<Transform> pathTransforms = new List<Transform>();
-    //private PlayerManager playerManager;
-    [SerializeField] private PlayerGridMovement player;
-    [SerializeField] private Camera camera;
+    private int startX, startY, endX = 2, endY = 2;
+    private bool findDistance;
+
     private GameObject previousClickedTile;
     private GameObject currentClickedTile;
+    
+    private GameObject[,] gridArray;
+
+    private List<GameObject> path = new List<GameObject>();
+    private List<Transform> pathTransforms = new List<Transform>();
 
     #endregion
 
     private void Awake()
     {
-        //playerManager = PlayerManager.instance;
-        //player = playerManager.player.GetComponent<PlayerGridMovement>();
-
         gridArray = new GameObject[rows, columns];
 
-        startX = (int)(player.transform.position.x + 1);
-        startY = (int)player.transform.position.z;
+        startX = (int)(playerGridMovement.transform.position.x + 1);
+        startY = (int)(playerGridMovement.transform.position.z);
 
-
-        if (gridPrefab)
+        if (gridTile)
             GenerateGrid();
         else
-            Debug.Log("Missing gridprefab");
+            Debug.Log("Missing gridTile prefab");
 
         previousClickedTile = null;
         currentClickedTile = null;
@@ -50,35 +49,39 @@ public class GridBehaviour : MonoBehaviour
 
     private void Update()
     {
+        // Clamp the end destination so this can never be a position outside the grid
         if(endX > rows - 1)
             endX = Mathf.Clamp(endX, 0, rows - 1);
-
         if(endY > columns - 1)
             endY = Mathf.Clamp(endY, 0, columns - 1);
 
-        if (player.stoppedMoving)
-            ResetGrid();
+        // Reset the grid, tiles and path when the player has stopped moving
+        if (playerGridMovement.stoppedMoving)
+            ResetAll();
 
+        // If there was a click on a tile, set everything in motion with findDistance, if not, findDistance remains false
         findDistance = OnClick();
 
+        // Set everything in motion to prepare the grid for player movement
         if (findDistance)
         { 
             SetDistance();
             SetPath();
             LightUpPath();
             SetPathTransforms();
-            player.SetWayPoints(pathTransforms);
+            playerGridMovement.SetWayPoints(pathTransforms);
             findDistance = false;
         }
     }
 
+    // Generates the grid
     private void GenerateGrid()
     {
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)
             {
-                GameObject obj = Instantiate(gridPrefab, new Vector3(leftBottomLocation.x + scale * i, leftBottomLocation.y, leftBottomLocation.z + scale * j), Quaternion.identity);
+                GameObject obj = Instantiate(gridTile, new Vector3(leftBottomLocation.x + scale * i, leftBottomLocation.y, leftBottomLocation.z + scale * j), Quaternion.identity);
                 obj.transform.SetParent(gameObject.transform);
                 obj.GetComponent<GridStat>().x = i;
                 obj.GetComponent<GridStat>().y = j;
@@ -87,17 +90,29 @@ public class GridBehaviour : MonoBehaviour
         }
     }
 
-    private void ResetGrid()
+    // Initializes the tiles in the grid
+    private void InitialSetup()
+    {
+        foreach (GameObject obj in gridArray)
+        {
+            obj.GetComponent<GridStat>().visited = -1;
+        }
+        gridArray[startX, startY].GetComponent<GridStat>().visited = 0;
+    }
+
+    // Resets the grid, tiles, waypoints, path, recalculates the starting positions and reanables the player to move again
+    private void ResetAll()
     {
         DimAllPaths();
-        player.EmptyWayPoints();
-        player.currentWayPoint = 0;
+        playerGridMovement.EmptyWayPoints();
+        playerGridMovement.currentWayPoint = 0;
         startX = endX;
         startY = endY;
         path.Clear();
-        player.stoppedMoving = false;
+        playerGridMovement.stoppedMoving = false;
     }
 
+    // Re-initializes the tiles in the grid and determines the distance
     private void SetDistance()
     { 
         InitialSetup();
@@ -111,13 +126,16 @@ public class GridBehaviour : MonoBehaviour
         }                
     }
 
+    // Set the path by refilling the path list with tiles the player has to walk on in order to get the shortest route to the target position
     private void SetPath()
     {
         int step;
         int x = endX; 
         int y = endY;
         List<GameObject> tempList = new List<GameObject>();
+
         path.Clear();
+
         if (gridArray[endX, endY] && gridArray[endX, endY].GetComponent<GridStat>().visited > 0)
         {
             path.Add(gridArray[x, y]);
@@ -129,7 +147,7 @@ public class GridBehaviour : MonoBehaviour
             return;
         }
 
-        for (int i = step; step > -1; step--)
+        for (; step > -1; step--)
         {
             if (TestDirection(x, y, step, 1))
                 tempList.Add(gridArray[x, y + 1]);
@@ -148,19 +166,10 @@ public class GridBehaviour : MonoBehaviour
         }
     }
 
-    private void InitialSetup()
-    {
-        foreach (GameObject obj in gridArray)
-        {
-            obj.GetComponent<GridStat>().visited = -1;
-        }
-        gridArray[startX, startY].GetComponent<GridStat>().visited = 0;
-    }
-
+    // Test the given direction
     private bool TestDirection(int x, int y, int step, int direction)
     {
-        //1 = up, 2 = right, 3 = down, 4 = left
-        switch (direction)
+        switch (direction) // 1 = up, 2 = right, 3 = down, 4 = left
         {
             case 1:
                 if (y + 1 < columns && gridArray[x, y + 1] && gridArray[x, y + 1].GetComponent<GridStat>().visited == step)
@@ -183,6 +192,7 @@ public class GridBehaviour : MonoBehaviour
         return false;
     }
 
+    // Test all four possible directions
     private void TestFourDirections(int x, int y, int step)
     {
         if (TestDirection(x, y, -1, 1))
@@ -195,12 +205,14 @@ public class GridBehaviour : MonoBehaviour
             SetVisited(x - 1, y, step);
     }
 
+    // Set the tile as visited with the step number
     private void SetVisited(int x, int y, int step)
     {
         if (gridArray[x, y])
             gridArray[x, y].GetComponent<GridStat>().visited = step;
     }
 
+    // Return the tile gameobject that is closest to the targetlocation, from a list of all tiles
     private GameObject FindClosest(Transform targetLocation, List<GameObject> list)
     {
         float currentDistance = scale * rows * columns;
@@ -216,6 +228,7 @@ public class GridBehaviour : MonoBehaviour
         return list[indexNumber];
     }
 
+    // Fill the list pathTransforms with the transforms of all the tile objects in path (and reverse it, otherwise it's in the wrong order)
     private void SetPathTransforms()
     {
         pathTransforms.Clear();
@@ -226,6 +239,7 @@ public class GridBehaviour : MonoBehaviour
         pathTransforms.Reverse();
     }
 
+    // Change the material of all tiles that are in the path and the start tile, excluding the clicked tile
     private void LightUpPath()
     {
         foreach (GameObject obj in path)
@@ -236,6 +250,7 @@ public class GridBehaviour : MonoBehaviour
         gridArray[startX, startY].GetComponent<GridStat>().SetPathMaterial();
     }
 
+    // Change the material of all tiles that are in the path and the start tile back to the default material
     private void DimAllPaths()
     {
         foreach (GameObject obj in path)
@@ -246,6 +261,7 @@ public class GridBehaviour : MonoBehaviour
         gridArray[startX, startY].GetComponent<GridStat>().SetDefaultMaterial();
     }
 
+    // Shoot a raycast when there has been a mouse click, if it hits a tile, set it as new currentClickedTile, change the end position accordingly
     private bool OnClick()
     {
         if (path.Count != 0)
@@ -254,9 +270,8 @@ public class GridBehaviour : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         { 
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            { 
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
                 if (hit.transform.gameObject.GetComponent<GridStat>() != null)
                 {
                     if (currentClickedTile != null)
@@ -265,10 +280,10 @@ public class GridBehaviour : MonoBehaviour
                         GridStat previousClickedTileStat = previousClickedTile.GetComponent<GridStat>();
                         previousClickedTileStat.isTargetTile = false;
                         previousClickedTileStat.SetDefaultMaterial();
-                    }     
+                    }
                     currentClickedTile = hit.transform.gameObject;
                     GridStat currentClickedTileStat = currentClickedTile.GetComponent<GridStat>();
-                    currentClickedTileStat.isTargetTile = true;  
+                    currentClickedTileStat.isTargetTile = true;
                     currentClickedTileStat.SetTargetMaterial();
 
                     endX = currentClickedTileStat.x;
