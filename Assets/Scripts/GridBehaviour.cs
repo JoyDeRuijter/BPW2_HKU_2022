@@ -20,14 +20,17 @@ public class GridBehaviour : MonoBehaviour
     public List<GameObject> path = new List<GameObject>();
     
     private List<Transform> pathTransforms = new List<Transform>();
-    private PlayerManager playerManager;
+    //private PlayerManager playerManager;
     [SerializeField] private PlayerGridMovement player;
+    [SerializeField] private Camera camera;
+    private GameObject previousClickedTile;
+    private GameObject currentClickedTile;
 
     #endregion
 
     private void Awake()
     {
-        playerManager = PlayerManager.instance;
+        //playerManager = PlayerManager.instance;
         //player = playerManager.player.GetComponent<PlayerGridMovement>();
 
         gridArray = new GameObject[rows, columns];
@@ -40,6 +43,9 @@ public class GridBehaviour : MonoBehaviour
             GenerateGrid();
         else
             Debug.Log("Missing gridprefab");
+
+        previousClickedTile = null;
+        currentClickedTile = null;
     }
 
     private void Update()
@@ -49,8 +55,6 @@ public class GridBehaviour : MonoBehaviour
 
         if(endY > columns - 1)
             endY = Mathf.Clamp(endY, 0, columns - 1);
-
-        Debug.Log("end X: " + endX + " - " + "end Y: " + endY);
 
         if (player.stoppedMoving)
         {
@@ -62,6 +66,8 @@ public class GridBehaviour : MonoBehaviour
             path.Clear();
             player.stoppedMoving = false;
         }
+
+        OnClick();
 
         if (findDistance)
         { 
@@ -222,9 +228,10 @@ public class GridBehaviour : MonoBehaviour
     {
         foreach (GameObject obj in path)
         {
-            if (obj.GetComponent<GridStat>().visited > 0)
+            if (obj.GetComponent<GridStat>().visited > 0 && obj != currentClickedTile)
                 obj.GetComponent<GridStat>().SetPathMaterial();
         }
+        gridArray[startX, startY].GetComponent<GridStat>().SetPathMaterial();
     }
 
     private void DimAllPaths()
@@ -233,6 +240,37 @@ public class GridBehaviour : MonoBehaviour
         {
             if (obj.GetComponent<GridStat>().visited > 0)
                 obj.GetComponent<GridStat>().SetDefaultMaterial();
+        }
+        gridArray[startX, startY].GetComponent<GridStat>().SetDefaultMaterial();
+    }
+
+    private void OnClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        { 
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            { 
+                if (hit.transform.gameObject.GetComponent<GridStat>() != null)
+                {
+                    if (currentClickedTile != null)
+                    {
+                        previousClickedTile = currentClickedTile;
+                        GridStat previousClickedTileStat = previousClickedTile.GetComponent<GridStat>();
+                        previousClickedTileStat.isTargetTile = false;
+                        previousClickedTileStat.SetDefaultMaterial();
+                    }     
+                    currentClickedTile = hit.transform.gameObject;
+                    GridStat currentClickedTileStat = currentClickedTile.GetComponent<GridStat>();
+                    currentClickedTileStat.isTargetTile = true;  
+                    currentClickedTileStat.SetTargetMaterial();
+
+                    endX = currentClickedTileStat.x;
+                    endY = currentClickedTileStat.y;
+                    findDistance = true;
+                }
+            }
         }
     }
 }

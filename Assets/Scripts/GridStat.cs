@@ -11,6 +11,8 @@ public class GridStat : MonoBehaviour
 
     [SerializeField] private Material defaultMat;
     [SerializeField] private Material pathMat;
+    [SerializeField] private Material targetMat;
+    [HideInInspector] public bool isTargetTile = false;
 
     #endregion
 
@@ -22,5 +24,10 @@ public class GridStat : MonoBehaviour
     public void SetDefaultMaterial()
     { 
         GetComponent<MeshRenderer>().material = defaultMat;
+    }
+
+    public void SetTargetMaterial()
+    { 
+        GetComponent<MeshRenderer>().material = targetMat;
     }
 }
