@@ -9,15 +9,18 @@ public class GridStat : MonoBehaviour
     public int x = 0;
     public int y = 0;
 
+    [SerializeField] private Material defaultMat;
+    [SerializeField] private Material pathMat;
+
     #endregion
 
-    private void Awake()
+    public void SetPathMaterial()
     {
-        
+        GetComponent<MeshRenderer>().material = pathMat;
     }
 
-    private void Update()
-    {
-        
+    public void SetDefaultMaterial()
+    { 
+        GetComponent<MeshRenderer>().material = defaultMat;
     }
 }

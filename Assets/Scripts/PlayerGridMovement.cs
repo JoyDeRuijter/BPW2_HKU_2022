@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerGridMovement : MonoBehaviour
 {
     #region Variables
 
     [SerializeField] private int maxSteps;
     [SerializeField] private Transform[] wayPoints;
-    private int currentWayPoint = 0;
+    [HideInInspector] public int currentWayPoint = 0;
     private Rigidbody rb;
     [SerializeField] private float moveSpeed = 5;
     private float xOffset = -0.5f;
@@ -27,12 +27,6 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Movement();
-        if(stoppedMoving)
-        {
-            EmptyWayPoints();
-            currentWayPoint = 0;
-            Debug.Log("emptied way points");
-        }
     }
 
     private void Movement()
@@ -77,7 +71,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void EmptyWayPoints()
+    public void EmptyWayPoints()
     {
         for (int i = 0; i < wayPoints.Length; i++)
         {

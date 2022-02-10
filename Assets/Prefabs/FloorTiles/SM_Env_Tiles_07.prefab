@@ -111,3 +111,5 @@ MonoBehaviour:
   visited: -1
   x: 0
   y: 0
+  defaultMat: {fileID: 2100000, guid: 42b64fdb315e3054ea757d8d1c4bcfa7, type: 2}
+  pathMat: {fileID: 2100000, guid: 21f3d29d66386004a8eb26022d532df7, type: 2}

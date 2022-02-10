@@ -21,14 +21,14 @@ public class GridBehaviour : MonoBehaviour
     
     private List<Transform> pathTransforms = new List<Transform>();
     private PlayerManager playerManager;
-    private Player player;
+    private PlayerGridMovement player;
 
     #endregion
 
     private void Awake()
     {
         playerManager = PlayerManager.instance;
-        player = playerManager.player.GetComponent<Player>();
+        player = playerManager.player.GetComponent<PlayerGridMovement>();
 
         gridArray = new GameObject[rows, columns];
 
@@ -46,17 +46,20 @@ public class GridBehaviour : MonoBehaviour
     {
         if (player.stoppedMoving)
         {
+            DimAllPaths();
+            player.EmptyWayPoints();
+            player.currentWayPoint = 0;
             startX = endX;
             startY = endY;
             path.Clear();
             player.stoppedMoving = false;
-            Debug.Log("cleared path");
         }
 
         if (findDistance)
         { 
             SetDistance();
             SetPath();
+            LightUpPath();
             SetPathTransforms();
             player.SetWayPoints(pathTransforms);
             findDistance = false;
@@ -207,5 +210,23 @@ public class GridBehaviour : MonoBehaviour
             pathTransforms.Add(obj.transform);
 
         pathTransforms.Reverse();
+    }
+
+    private void LightUpPath()
+    {
+        foreach (GameObject obj in path)
+        {
+            if (obj.GetComponent<GridStat>().visited > 0)
+                obj.GetComponent<GridStat>().SetPathMaterial();
+        }
+    }
+
+    private void DimAllPaths()
+    {
+        foreach (GameObject obj in path)
+        {
+            if (obj.GetComponent<GridStat>().visited > 0)
+                obj.GetComponent<GridStat>().SetDefaultMaterial();
+        }
     }
 }
