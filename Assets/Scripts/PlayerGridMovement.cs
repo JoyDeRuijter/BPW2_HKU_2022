@@ -19,6 +19,7 @@ public class PlayerGridMovement : MonoBehaviour
     private Vector3 wayPointPosition = Vector3.zero;
 
     private Rigidbody rb;
+    private Animator anim;
 
     private Transform[] wayPoints;
     
@@ -28,11 +29,13 @@ public class PlayerGridMovement : MonoBehaviour
     {
         wayPoints = new Transform[maxSteps];
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
     {
         Movement();
+        TestAnimations();
     }
 
     // Move the rigidbody of the player in the direction of the waypoint
@@ -47,7 +50,12 @@ public class PlayerGridMovement : MonoBehaviour
         {
             stoppedMoving = StoppedMoving();
             if (stoppedMoving)
+            {
+                anim.SetBool("IsWalking", false);
                 return;
+            }  
+            else
+                anim.SetBool("IsWalking", true);
 
             currentWayPoint += 1;
             currentWayPoint %= wayPoints.Length;
@@ -110,5 +118,14 @@ public class PlayerGridMovement : MonoBehaviour
             else
                 break;
         }
+    }
+
+    // Test method for animations, place this in another player script later
+    private void TestAnimations()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+            anim.SetBool("Attack", true);
+        if (Input.GetKeyUp(KeyCode.A))
+            anim.SetBool("Attack", false);
     }
 }
