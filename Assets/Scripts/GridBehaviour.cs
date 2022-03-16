@@ -268,7 +268,7 @@ public class GridBehaviour : MonoBehaviour
             return false;
 
         if (Input.GetMouseButtonDown(0))
-        { 
+        {
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {

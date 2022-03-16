@@ -19,6 +19,7 @@ namespace Dungeon
         public int numRooms = 10;
         public Dictionary<Vector3Int, Tiletype> dungeon = new Dictionary<Vector3Int, Tiletype>();
         public List<Room> roomList = new List<Room>();
+        public Dictionary<Vector3Int, GameObject> floorList = new Dictionary<Vector3Int, GameObject>();
 
         #endregion
 
@@ -29,9 +30,6 @@ namespace Dungeon
 
         public void Generate()
         {
-            // Rooms allocaten
-            // Connect rooms with corridors
-            // Generate the dungeon
             // Doors?
 
             for (int i = 0; i < numRooms; i++)
@@ -69,9 +67,6 @@ namespace Dungeon
                 {
                     for (int z = -1; z <= 1; z++)
                     {
-                        //if (Mathf.Abs(x) == Mathf.Abs(z))
-                            //continue;
-
                         Vector3Int newPos = kvp + new Vector3Int(x, 0, z);
 
                         if (dungeon.ContainsKey(newPos))
@@ -119,7 +114,7 @@ namespace Dungeon
                 switch (kvp.Value)
                 {
                     case Tiletype.Floor:
-                        Instantiate(floorPrefab, kvp.Key, Quaternion.identity, transform);
+                        floorList.Add(kvp.Key, (Instantiate(floorPrefab, kvp.Key, Quaternion.identity, transform)));
                         break;
                     case Tiletype.Wall:
                         Vector3Int wallPosition = new Vector3Int(kvp.Key.x, 1, kvp.Key.z);

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4814355187466845859}
+  - component: {fileID: -1830904195565965147}
   m_Layer: 0
   m_Name: FloorPrefab
   m_TagString: Untagged
@@ -31,6 +32,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-1830904195565965147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6256784883217862835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7425fbb21ac8243b51ca16fe9c8a13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  status: 0
+  isTargetTile: 0
+  defaultMat: {fileID: 2100000, guid: 54061fa668860e54a8e96694301d76a9, type: 2}
+  pathMat: {fileID: 2100000, guid: 16859a71ca99eca4aabb5a14e095bb5a, type: 2}
+  targetMat: {fileID: 2100000, guid: 21f3d29d66386004a8eb26022d532df7, type: 2}
+  visited: -1
+  x: 0
+  y: 0
 --- !u!1001 &9090865003129029870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90,7 +111,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 54061fa668860e54a8e96694301d76a9, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5556977910576909304, guid: 21553bc7156edc542a8b3cbdd906eedb, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 21553bc7156edc542a8b3cbdd906eedb, type: 3}
 --- !u!4 &1583703938913917610 stripped
 Transform:
