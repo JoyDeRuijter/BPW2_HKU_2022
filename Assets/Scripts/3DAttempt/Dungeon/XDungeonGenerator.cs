@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Dungeon
 {
-    public class DungeonGenerator : MonoBehaviour
+    public class XDungeonGenerator : MonoBehaviour
     {
         #region Variables
 
@@ -18,7 +18,7 @@ namespace Dungeon
         public int maxRoomSize = 8;
         public int numRooms = 10;
         public Dictionary<Vector3Int, Tiletype> dungeon = new Dictionary<Vector3Int, Tiletype>();
-        public List<Room> roomList = new List<Room>();
+        public List<XRoom> roomList = new List<XRoom>();
         public Dictionary<Vector3Int, GameObject> floorList = new Dictionary<Vector3Int, GameObject>();
 
         #endregion
@@ -39,7 +39,7 @@ namespace Dungeon
                 int minZ = Random.Range(0, gridHeight);
                 int maxZ = minZ + Random.Range(minRoomSize, maxRoomSize + 1);
 
-                Room room = new Room(minX, maxX, minZ, maxZ);
+                XRoom room = new XRoom(minX, maxX, minZ, maxZ);
 
                 if (RoomFitsInDungeon(room))
                     AddRoomToDungeon(room);
@@ -49,8 +49,8 @@ namespace Dungeon
 
             for (int i = 0; i < roomList.Count; i++)
             { 
-                Room room = roomList[i];
-                Room otherRoom = roomList[(i + Random.Range(1, roomList.Count)) % roomList.Count];
+                XRoom room = roomList[i];
+                XRoom otherRoom = roomList[(i + Random.Range(1, roomList.Count)) % roomList.Count];
                 ConnectRooms(room, otherRoom);
             }
 
@@ -77,7 +77,7 @@ namespace Dungeon
             }
         }
 
-        public void ConnectRooms(Room _roomOne, Room _roomTwo)
+        public void ConnectRooms(XRoom _roomOne, XRoom _roomTwo)
         {
             Vector3Int posOne = _roomOne.GetCenter();
             Vector3Int posTwo = _roomTwo.GetCenter();
@@ -124,7 +124,7 @@ namespace Dungeon
             }
         }
 
-        public void AddRoomToDungeon(Room room)
+        public void AddRoomToDungeon(XRoom room)
         {
             for (int x = room.minX; x <= room.maxX; x++)
             {
@@ -136,7 +136,7 @@ namespace Dungeon
             roomList.Add(room);
         }
 
-        public bool RoomFitsInDungeon(Room room)
+        public bool RoomFitsInDungeon(XRoom room)
         {
             for (int x = room.minX - 1; x <= room.maxX + 1; x++)
             {
@@ -154,13 +154,13 @@ namespace Dungeon
 
     public enum Tiletype { Floor, Wall}
 
-    public class Room
+    public class XRoom
     {
         #region Variables
 
         public int minX, maxX, minZ, maxZ;
 
-        public Room(int _minX, int _maxX, int _minZ, int _maxZ)
+        public XRoom(int _minX, int _maxX, int _minZ, int _maxZ)
         { 
             minX = _minX;
             maxX = _maxX;
