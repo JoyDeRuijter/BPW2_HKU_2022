@@ -5,11 +5,30 @@ public class Tile : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private Color baseColor, offsetColor;
+    [Header("Tile Colors")]
+    [SerializeField] private Color baseColor;
+    [SerializeField] private Color offsetColor;
+
+    [Header("References")]
+    [Space (10)]
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private GameObject highLight;
+    public GameObject highLight;
+
+
+    [HideInInspector] public bool isInPlayerRange;
+    [HideInInspector] public int xPos;
+    [HideInInspector] public int yPos;
+
+    private GameManager gameManager;
 
     #endregion
+
+    private void Start()
+    {
+        gameManager = GameManager.instance;
+        xPos = (int)transform.position.x;
+        yPos = (int)transform.position.y;
+    }
 
     public void Initialize(bool isOffset)
     {
@@ -18,11 +37,17 @@ public class Tile : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        highLight.SetActive(true);
+        gameManager.selectedTile = this;
     }
 
     private void OnMouseExit()
     {
         highLight.SetActive(false);
+    }
+
+    private void OnMouseDown()
+    {
+        if (isInPlayerRange)
+            gameManager.lastClickedTile = this;
     }
 }

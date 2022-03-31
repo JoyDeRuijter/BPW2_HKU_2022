@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Dungeon 
+namespace Dungeon
 {
-    public enum TileType { Floor, Wall};
+    public enum TileType { Floor, Wall };
 
     public class DungeonGenerator : MonoBehaviour
     {
@@ -26,9 +26,12 @@ namespace Dungeon
         [Header("References")]
         [Space(10)]
         [SerializeField] Transform cam;
+        [SerializeField] GameObject playerPrefab;
 
         public Dictionary<Vector3Int, TileType> dungeon = new Dictionary<Vector3Int, TileType>();
         public List<Room> rooms = new List<Room>();
+
+        [HideInInspector] public GameObject player;
 
         #endregion
 
@@ -36,11 +39,7 @@ namespace Dungeon
         {
             Generate();
             PlaceCamera();
-        }
-
-        private void Update()
-        {
-        
+            PlacePlayer();
         }
 
         public void Generate()
@@ -173,6 +172,12 @@ namespace Dungeon
         {
             Vector3Int startPos = rooms[0].GetCenter();
             cam.transform.position = new Vector3((float)startPos.x, (float)startPos.y, cam.transform.position.z);
+        }
+
+        private void PlacePlayer()
+        {
+            Vector3Int startPos = rooms[0].GetCenter();
+            player = Instantiate(playerPrefab, new Vector3((float)startPos.x, (float)startPos.y, -1), Quaternion.identity);
         }
 
     }
