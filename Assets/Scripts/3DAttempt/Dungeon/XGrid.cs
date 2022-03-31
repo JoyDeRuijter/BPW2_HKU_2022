@@ -7,7 +7,7 @@ public class Grid : MonoBehaviour
     #region Variables
 
     public Dictionary<Vector3Int, TileStatus> grid = new Dictionary<Vector3Int, TileStatus>();
-    [SerializeField] private Dungeon.DungeonGenerator dungeonGen;
+    [SerializeField] private XDungeon.XDungeonGenerator dungeonGen;
 
     #endregion
 
@@ -23,7 +23,7 @@ public class Grid : MonoBehaviour
 
     private void LoadGrid()
     {
-        foreach (var kvp in dungeonGen.floorList)
+        foreach (var kvp in dungeonGen.XfloorList)
         {
             grid.Add(kvp.Key, kvp.Value.GetComponent<GridTile>().status);
         }

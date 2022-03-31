@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-namespace Dungeon
+namespace XDungeon
 {
     public class XDungeonGenerator : MonoBehaviour
     {
@@ -17,9 +17,9 @@ namespace Dungeon
         public int minRoomSize = 3;
         public int maxRoomSize = 8;
         public int numRooms = 10;
-        public Dictionary<Vector3Int, Tiletype> dungeon = new Dictionary<Vector3Int, Tiletype>();
-        public List<XRoom> roomList = new List<XRoom>();
-        public Dictionary<Vector3Int, GameObject> floorList = new Dictionary<Vector3Int, GameObject>();
+        public Dictionary<Vector3Int, XTiletype> Xdungeon = new Dictionary<Vector3Int, XTiletype>();
+        public List<XRoom> XroomList = new List<XRoom>();
+        public Dictionary<Vector3Int, GameObject> XfloorList = new Dictionary<Vector3Int, GameObject>();
 
         #endregion
 
@@ -47,10 +47,10 @@ namespace Dungeon
                     i--;
             }
 
-            for (int i = 0; i < roomList.Count; i++)
+            for (int i = 0; i < XroomList.Count; i++)
             { 
-                XRoom room = roomList[i];
-                XRoom otherRoom = roomList[(i + Random.Range(1, roomList.Count)) % roomList.Count];
+                XRoom room = XroomList[i];
+                XRoom otherRoom = XroomList[(i + Random.Range(1, XroomList.Count)) % XroomList.Count];
                 ConnectRooms(room, otherRoom);
             }
 
@@ -60,7 +60,7 @@ namespace Dungeon
 
         public void AllocateWalls()
         {
-            var keys = dungeon.Keys.ToList();
+            var keys = Xdungeon.Keys.ToList();
             foreach (var kvp in keys)
             {
                 for (int x = -1; x <= 1; x++)
@@ -69,9 +69,9 @@ namespace Dungeon
                     {
                         Vector3Int newPos = kvp + new Vector3Int(x, 0, z);
 
-                        if (dungeon.ContainsKey(newPos))
+                        if (Xdungeon.ContainsKey(newPos))
                             continue;
-                        dungeon.Add(newPos, Tiletype.Wall);
+                        Xdungeon.Add(newPos, XTiletype.Wall);
                     }
                 }
             }
@@ -88,10 +88,10 @@ namespace Dungeon
             {
                 Vector3Int position = new Vector3Int(x, 0, posOne.z);
 
-                if (dungeon.ContainsKey(position))
+                if (Xdungeon.ContainsKey(position))
                     continue;
 
-                dungeon.Add(position, Tiletype.Floor);
+                Xdungeon.Add(position, XTiletype.Floor);
             }
 
             int dirZ = posTwo.z > posOne.z ? 1 : -1;
@@ -99,24 +99,24 @@ namespace Dungeon
             {
                 Vector3Int position = new Vector3Int(x, 0, z);
 
-                if (dungeon.ContainsKey(position))
+                if (Xdungeon.ContainsKey(position))
                     continue;
 
-                dungeon.Add(position, Tiletype.Floor);
+                Xdungeon.Add(position, XTiletype.Floor);
             }
 
         }
 
         public void SpawnDungeon()
         {
-            foreach (KeyValuePair<Vector3Int, Tiletype> kvp in dungeon)
+            foreach (KeyValuePair<Vector3Int, XTiletype> kvp in Xdungeon)
             {
                 switch (kvp.Value)
                 {
-                    case Tiletype.Floor:
-                        floorList.Add(kvp.Key, (Instantiate(floorPrefab, kvp.Key, Quaternion.identity, transform)));
+                    case XTiletype.Floor:
+                        XfloorList.Add(kvp.Key, (Instantiate(floorPrefab, kvp.Key, Quaternion.identity, transform)));
                         break;
-                    case Tiletype.Wall:
+                    case XTiletype.Wall:
                         Vector3Int wallPosition = new Vector3Int(kvp.Key.x, 1, kvp.Key.z);
                         Instantiate(wallPrefab, wallPosition, Quaternion.identity, transform);
                         break;
@@ -130,10 +130,10 @@ namespace Dungeon
             {
                 for (int z = room.minZ; z <= room.maxZ; z++)
                 {
-                    dungeon.Add(new Vector3Int(x, 0, z), Tiletype.Floor);
+                    Xdungeon.Add(new Vector3Int(x, 0, z), XTiletype.Floor);
                 }
             }
-            roomList.Add(room);
+            XroomList.Add(room);
         }
 
         public bool RoomFitsInDungeon(XRoom room)
@@ -142,7 +142,7 @@ namespace Dungeon
             {
                 for (int z = room.minZ - 1; z <= room.maxZ + 1; z++)
                 {
-                    if (dungeon.ContainsKey(new Vector3Int(x, 0, z)))
+                    if (Xdungeon.ContainsKey(new Vector3Int(x, 0, z)))
                         return false;
                 }
             }
@@ -152,7 +152,7 @@ namespace Dungeon
     }
 
 
-    public enum Tiletype { Floor, Wall}
+    public enum XTiletype { Floor, Wall}
 
     public class XRoom
     {

@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6676919344204001648}
   - component: {fileID: 307551049544690356}
   m_Layer: 0
-  m_Name: Tile
+  m_Name: TileWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,9 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345ab4e296c1fa945b382704fbbb6ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.12986827, g: 0.17431426, b: 0.3584906, a: 1}
-  offsetColor: {r: 0.15013188, g: 0.20017575, b: 0.414, a: 1}
-  renderer: {fileID: 3247063128924989255}
+  baseColor: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
+  offsetColor: {r: 0.28235295, g: 0.28235295, b: 0.28235295, a: 1}
+  spriteRenderer: {fileID: 3247063128924989255}
   highLight: {fileID: 665483691497865162}
 --- !u!61 &307551049544690356
 BoxCollider2D:
