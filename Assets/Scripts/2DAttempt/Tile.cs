@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour
     public GameObject highLight;
 
 
-    [HideInInspector] public bool isInPlayerRange;
+    [HideInInspector] public bool isInUnitRange;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;
 
@@ -47,7 +47,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (isInPlayerRange)
+        if (isInUnitRange)
             gameManager.lastClickedTile = this;
     }
 }

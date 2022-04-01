@@ -22,11 +22,13 @@ namespace Dungeon
         [SerializeField] private int minRoomSize;
         [SerializeField] private int maxRoomSize;
         [SerializeField] private int numberOfRooms;
+        [SerializeField] private int numberOfEnemies;
 
         [Header("References")]
         [Space(10)]
         [SerializeField] Transform cam;
         [SerializeField] GameObject playerPrefab;
+        [SerializeField] GameObject enemyPrefab;
 
         public Dictionary<Vector3Int, TileType> dungeon = new Dictionary<Vector3Int, TileType>();
         public List<Room> rooms = new List<Room>();
@@ -40,6 +42,7 @@ namespace Dungeon
             Generate();
             PlaceCamera();
             PlacePlayer();
+            PlaceEnemies();
         }
 
         public void Generate()
@@ -178,6 +181,25 @@ namespace Dungeon
         {
             Vector3Int startPos = rooms[0].GetCenter();
             player = Instantiate(playerPrefab, new Vector3((float)startPos.x, (float)startPos.y, -1), Quaternion.identity);
+        }
+
+        private void PlaceEnemies()
+        {
+            int _enemyCounter = 0;
+            for (int x = (int)player.transform.position.x - 3; x < (int)player.transform.position.x + 4; x++)
+            {
+                for (int y = (int)player.transform.position.y - 3; y < (int)player.transform.position.y + 4; y++)
+                {
+                    Vector3Int checkPosition = new Vector3Int(x, y, 0);
+                    if (dungeon.ContainsKey(checkPosition) && checkPosition != player.transform.position && dungeon[checkPosition] == TileType.Floor && _enemyCounter < numberOfEnemies)
+                    {
+                        Vector3Int spawnPosition = new Vector3Int(checkPosition.x, checkPosition.y, -1);
+                        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+                        _enemyCounter++;
+                    }
+                }
+            }
+                
         }
 
     }
