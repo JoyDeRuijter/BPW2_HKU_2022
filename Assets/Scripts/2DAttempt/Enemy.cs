@@ -7,13 +7,4 @@ public class Enemy : Unit
     
     #endregion
 
-    private void Awake()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
 }

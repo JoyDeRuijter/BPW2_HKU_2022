@@ -28,8 +28,11 @@ public class GameManager : MonoBehaviour
     private Tile previouslySelectedTile;
     private Player player;
     private List<Unit>units = new List<Unit>();
+    private List<Enemy>enemies = new List<Enemy>();
     private int beginIndex;
     private Dungeon.DungeonGenerator dungeonGenerator;
+    private GameState gameState;
+    private int activeEnemy;
 
     #endregion
 
@@ -38,16 +41,25 @@ public class GameManager : MonoBehaviour
         dungeonGenerator = FindObjectOfType<Dungeon.DungeonGenerator>();
         player = FindObjectOfType<Player>();
         units = FindObjectsOfType<Unit>().Select(unit => unit).ToList();
+        foreach (Unit unit in units)
+        {
+            if (unit.gameObject.TryGetComponent<Player>(out Player player))
+                continue;
+            enemies.Add(unit.gameObject.GetComponent<Enemy>());
+        }
         DetermineFirstUnitTurn();
     }
 
     private void Update()
     {
-        TileToUnitMovement(units[beginIndex]);
         MoveCameraToPlayer();
+        ActOnGameState();
+        Debug.Log("Gamestate: " + gameState);
     }
 
     #region UnitTurns
+
+    public enum GameState { PlayerTurn, EnemyTurn}
 
     private void DetermineFirstUnitTurn()
     {
@@ -59,12 +71,46 @@ public class GameManager : MonoBehaviour
         units[beginIndex].unitState = Unit.UnitStates.StartTurn;
     }
 
+    private void ActOnGameState()
+    {
+        switch (gameState)
+        { 
+            case GameState.PlayerTurn:
+                CheckUnitRange(selectedTile, player);
+                if (player.unitState == Unit.UnitStates.Waiting)
+                    player.unitState = Unit.UnitStates.StartTurn;
+                if (player.unitState == Unit.UnitStates.Action)
+                    TileToUnitMovement(player);
+                if (player.unitState == Unit.UnitStates.EndTurn)
+                {
+                    activeEnemy = 0;
+                    player.completedAction = false;
+                    gameState = GameState.EnemyTurn;
+                    player.unitState = Unit.UnitStates.Waiting;
+                }
+                break;
 
-
-    private IEnumerator TurnTimer(float seconds)
-    { 
-        yield return new WaitForSeconds(seconds);
+            case GameState.EnemyTurn:
+                if (enemies == null)
+                    gameState = GameState.PlayerTurn;
+                CheckUnitRange(selectedTile, enemies[activeEnemy]);
+                if (enemies[activeEnemy].unitState == Unit.UnitStates.Waiting)
+                    enemies[activeEnemy].unitState = Unit.UnitStates.StartTurn;
+                if (enemies[activeEnemy].unitState == Unit.UnitStates.Action)
+                    TileToUnitMovement(enemies[activeEnemy]);
+                if (enemies[activeEnemy].unitState == Unit.UnitStates.EndTurn)
+                {
+                    enemies[activeEnemy].unitState = Unit.UnitStates.Waiting;
+                    enemies[activeEnemy].completedAction = false;
+                    if (activeEnemy == enemies.Count - 1)
+                        gameState = GameState.PlayerTurn;
+                    else
+                        activeEnemy++;
+                }
+                break;
+        }
     }
+
 
     #endregion
 
@@ -72,7 +118,7 @@ public class GameManager : MonoBehaviour
     // Check if the given tile is in range of the unit and if so, act accordingly
     private void CheckUnitRange(Tile tile, Unit unit)
     {
-        if (unit.isMoving)
+        if (unit.isMoving || tile == null)
             return;
 
         Vector2Int tilePosition = new Vector2Int(tile.xPos, tile.yPos);
@@ -98,7 +144,7 @@ public class GameManager : MonoBehaviour
             previouslySelectedTile = selectedTile.GetComponent<Tile>();
         }
 
-        if (Input.GetMouseButtonDown(0) && !unit.isMoving)
+        if (Input.GetMouseButtonDown(0) && !unit.isMoving && lastClickedTile != null)
             unit.targetPosition = new Vector3Int(lastClickedTile.xPos, lastClickedTile.yPos, -1);
     }
     #endregion

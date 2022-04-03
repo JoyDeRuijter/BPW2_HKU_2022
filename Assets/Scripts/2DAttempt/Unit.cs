@@ -18,7 +18,7 @@ public class Unit : MonoBehaviour
     [HideInInspector] public int yPos;
     [HideInInspector] public Vector3Int targetPosition;
     [HideInInspector] public bool isMoving;
-    [HideInInspector] public UnitStates unitState = UnitStates.Waiting;
+    public UnitStates unitState;
     [HideInInspector] public bool completedAction;
 
     #endregion
@@ -27,25 +27,30 @@ public class Unit : MonoBehaviour
     {
         xPos = (int)transform.position.x;
         yPos = (int)transform.position.y;
+        targetPosition = new Vector3Int(xPos, yPos, -1);
+        unitState = UnitStates.Waiting;
     }
 
     private void Update()
     {
         ActOnState();
-        Move();
-        CheckForMovement();
+        StartCoroutine(CheckForMovement());
     }
 
     #region UnitMovement
 
-    private void Move()
+    private IEnumerator Move()
     {
         if (transform.position != targetPosition && targetPosition != Vector3Int.zero)
         {
-            float step = movementSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * step);
+            while (transform.position != targetPosition)
+            { 
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * movementSpeed);
+                yield return new WaitForSeconds(4f);
+            }
             xPos = (int)transform.position.x;
             yPos = (int)transform.position.y;
+            completedAction = true;
         }
     }
 
@@ -73,16 +78,21 @@ public class Unit : MonoBehaviour
         {
             case UnitStates.Waiting:
                 Debug.Log(name + " is waiting on its turn");
+                targetPosition = new Vector3Int(xPos, yPos, -1);
                 completedAction = false;
                 break;
             case UnitStates.StartTurn:
                 Debug.Log("Start turn " + name);
+                // Indicator UI that it's the unit's turn with ienumerator?
+                targetPosition = new Vector3Int(xPos, yPos, -1);
+                unitState = UnitStates.Action;
                 break;
             case UnitStates.Action:
                 Debug.Log("Action turn " + name);
-                //Move();
-                //StartCoroutine(CheckForMovement());
-                completedAction = true;
+                //while (unitState == UnitStates.Action && !completedAction)
+                    StartCoroutine(Move());
+                if (completedAction)
+                    unitState = UnitStates.EndTurn;
                 break;
             case UnitStates.EndTurn:
                 Debug.Log("End turn " + name);

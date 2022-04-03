@@ -7,8 +7,4 @@ public class Player : Unit
 
     #endregion
 
-    private void Awake()
-    {
-
-    }
 }

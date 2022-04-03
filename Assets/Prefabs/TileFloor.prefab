@@ -262,15 +262,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345ab4e296c1fa945b382704fbbb6ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.42641354, g: 0.7924528, b: 0.36183694, a: 1}
-  offsetColor: {r: 0.37425122, g: 0.69699997, b: 0.31931525, a: 1}
+  baseColor: {r: 0.3711285, g: 0.4429992, b: 0.4716981, a: 1}
+  offsetColor: {r: 0.34991667, g: 0.41621664, b: 0.442, a: 1}
   spriteRenderer: {fileID: 3247063128924989255}
   highLight: {fileID: 665483691497865162}
-  selectedLight: {fileID: 2588520994938333861}
-  isInPlayerRange: 0
+  isInUnitRange: 0
   xPos: 0
   yPos: 0
-  isClicked: 0
 --- !u!61 &307551049544690356
 BoxCollider2D:
   m_ObjectHideFlags: 0

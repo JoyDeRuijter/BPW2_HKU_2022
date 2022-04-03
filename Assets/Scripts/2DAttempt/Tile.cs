@@ -37,6 +37,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        //Debug.Log("Mouse hovered over " + this.name);
         gameManager.selectedTile = this;
     }
 
