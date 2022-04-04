@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
         Vector2Int unitPosition = new Vector2Int(unit.xPos, unit.yPos);
         float distance = Vector2Int.Distance(tilePosition, unitPosition);
 
-        if (distance == 1 && dungeonGenerator.dungeon[tilePositionDungeon] == Dungeon.TileType.Floor)
+        if (distance == 1 && dungeonGenerator.dungeon[tilePositionDungeon] == Dungeon.TileType.Floor && (unit.unitState == Unit.UnitStates.StartTurn || unit.unitState == Unit.UnitStates.Action))
         {
             tile.isInUnitRange = true;
             tile.highLight.SetActive(true);
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
             previouslySelectedTile = selectedTile.GetComponent<Tile>();
         }
 
-        if (Input.GetMouseButtonDown(0) && !unit.isMoving && lastClickedTile != null)
+        if (Input.GetMouseButtonDown(0) && !unit.isMoving && lastClickedTile != null && lastClickedTile.transform.position == selectedTile.transform.position)
             unit.targetPosition = new Vector3Int(lastClickedTile.xPos, lastClickedTile.yPos, -1);
     }
     #endregion

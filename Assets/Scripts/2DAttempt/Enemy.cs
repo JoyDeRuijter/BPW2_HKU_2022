@@ -8,3 +8,5 @@ public class Enemy : Unit
     #endregion
 
 }
+
+public enum EnemyType { Goblin, GoblinChief, Skeleton, Ghost}

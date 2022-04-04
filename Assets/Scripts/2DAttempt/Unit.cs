@@ -13,6 +13,10 @@ public class Unit : MonoBehaviour
     public int damage;
     public int maxHealth;
 
+    [Header("SFX")]
+    [SerializeField] private ParticleSystem startTurnEffect;
+    [SerializeField] private Outline outliner;
+
     [HideInInspector] public int currentHealth;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;
@@ -20,6 +24,9 @@ public class Unit : MonoBehaviour
     [HideInInspector] public bool isMoving;
     public UnitStates unitState;
     [HideInInspector] public bool completedAction;
+
+
+    private bool hasPlayedVfx;
 
     #endregion
 
@@ -46,7 +53,7 @@ public class Unit : MonoBehaviour
             while (transform.position != targetPosition)
             { 
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * movementSpeed);
-                yield return new WaitForSeconds(4f);
+                yield return new WaitForSeconds(1f);
             }
             xPos = (int)transform.position.x;
             yPos = (int)transform.position.y;
@@ -77,28 +84,34 @@ public class Unit : MonoBehaviour
         switch (unitState)
         {
             case UnitStates.Waiting:
-                Debug.Log(name + " is waiting on its turn");
                 targetPosition = new Vector3Int(xPos, yPos, -1);
                 completedAction = false;
+                hasPlayedVfx = false;
+                outliner.enabled = false;
                 break;
             case UnitStates.StartTurn:
-                Debug.Log("Start turn " + name);
                 // Indicator UI that it's the unit's turn with ienumerator?
+                //if (!hasPlayedVfx)
+                //{ 
+                //    startTurnEffect.Play();
+                //    hasPlayedVfx = true;
+                //    Debug.Log("Play vfx");
+                //}
+                outliner.enabled = true;
                 targetPosition = new Vector3Int(xPos, yPos, -1);
                 unitState = UnitStates.Action;
                 break;
             case UnitStates.Action:
-                Debug.Log("Action turn " + name);
-                //while (unitState == UnitStates.Action && !completedAction)
-                    StartCoroutine(Move());
+                StartCoroutine(Move());
                 if (completedAction)
                     unitState = UnitStates.EndTurn;
+                hasPlayedVfx = false;
                 break;
             case UnitStates.EndTurn:
-                Debug.Log("End turn " + name);
+                outliner.enabled = false;
+               hasPlayedVfx = false;
                 break;
             default:
-                Debug.Log(name + " has no UnitState");
                 break;
         }    
     }
