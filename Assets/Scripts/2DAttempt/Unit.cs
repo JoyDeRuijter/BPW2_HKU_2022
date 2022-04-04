@@ -13,8 +13,7 @@ public class Unit : MonoBehaviour
     public int damage;
     public int maxHealth;
 
-    [Header("SFX")]
-    [SerializeField] private ParticleSystem startTurnEffect;
+    [Header("References")]
     [SerializeField] private Outline outliner;
 
     [HideInInspector] public int currentHealth;
@@ -25,8 +24,7 @@ public class Unit : MonoBehaviour
     public UnitStates unitState;
     [HideInInspector] public bool completedAction;
 
-
-    private bool hasPlayedVfx;
+    private Rigidbody rb;
 
     #endregion
 
@@ -36,6 +34,7 @@ public class Unit : MonoBehaviour
         yPos = (int)transform.position.y;
         targetPosition = new Vector3Int(xPos, yPos, -1);
         unitState = UnitStates.Waiting;
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -50,6 +49,7 @@ public class Unit : MonoBehaviour
     {
         if (transform.position != targetPosition && targetPosition != Vector3Int.zero)
         {
+            RotatePlayer();
             while (transform.position != targetPosition)
             { 
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * movementSpeed);
@@ -58,6 +58,29 @@ public class Unit : MonoBehaviour
             xPos = (int)transform.position.x;
             yPos = (int)transform.position.y;
             completedAction = true;
+
+            
+        }
+    }
+
+    private void RotatePlayer()
+    {
+        Vector3 lookDirection = (targetPosition - transform.position).normalized;
+        switch (lookDirection)
+        { 
+            case Vector3 v when v.Equals(Vector3.up):
+                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, 0f), 6f);
+                break;
+            case Vector3 v when v.Equals(Vector3.down):
+                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, 180f), 6f);
+                break;
+            case Vector3 v when v.Equals(Vector3.right):
+                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, -90f), 6f);
+                break;
+            case Vector3 v when v.Equals(Vector3.left):
+                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, 90f), 6f);
+                break;
+
         }
     }
 
@@ -86,17 +109,9 @@ public class Unit : MonoBehaviour
             case UnitStates.Waiting:
                 targetPosition = new Vector3Int(xPos, yPos, -1);
                 completedAction = false;
-                hasPlayedVfx = false;
                 outliner.enabled = false;
                 break;
             case UnitStates.StartTurn:
-                // Indicator UI that it's the unit's turn with ienumerator?
-                //if (!hasPlayedVfx)
-                //{ 
-                //    startTurnEffect.Play();
-                //    hasPlayedVfx = true;
-                //    Debug.Log("Play vfx");
-                //}
                 outliner.enabled = true;
                 targetPosition = new Vector3Int(xPos, yPos, -1);
                 unitState = UnitStates.Action;
@@ -105,11 +120,9 @@ public class Unit : MonoBehaviour
                 StartCoroutine(Move());
                 if (completedAction)
                     unitState = UnitStates.EndTurn;
-                hasPlayedVfx = false;
                 break;
             case UnitStates.EndTurn:
                 outliner.enabled = false;
-               hasPlayedVfx = false;
                 break;
             default:
                 break;

@@ -1355,8 +1355,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1693853911041118573}
-  m_LocalRotation: {x: -0.5735764, y: 0, z: 0, w: 0.8191521}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 1.171}
   m_LocalScale: {x: 1.25, y: 1, z: 1.2499999}
   m_Children:
   - {fileID: 1696236116523471097}
@@ -1364,7 +1364,7 @@ Transform:
   - {fileID: 1699251316477929045}
   m_Father: {fileID: 6910288643394642113}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -70, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!95 &1645848872914099899
 Animator:
   serializedVersion: 3
@@ -2831,6 +2831,7 @@ GameObject:
   - component: {fileID: 6975003172246453886}
   - component: {fileID: 8738156522388586190}
   - component: {fileID: 5120486571623088593}
+  - component: {fileID: -8937025292985142599}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2922,7 +2923,6 @@ MonoBehaviour:
   level: 1
   damage: 25
   maxHealth: 100
-  startTurnEffect: {fileID: 6297928566613071893}
   outliner: {fileID: 5120486571623088593}
   currentHealth: 0
   xPos: 0
@@ -2949,6 +2949,22 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!54 &-8937025292985142599
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4611247590087903771}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 62
+  m_CollisionDetection: 0
 --- !u!1001 &6171291493632289881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3009,10 +3025,5 @@ PrefabInstance:
 --- !u!4 &6172996338201391183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4001793114659862, guid: 72a652ab7835362499c9686288610212, type: 3}
-  m_PrefabInstance: {fileID: 6171291493632289881}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &6297928566613071893 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198835972586501196, guid: 72a652ab7835362499c9686288610212, type: 3}
   m_PrefabInstance: {fileID: 6171291493632289881}
   m_PrefabAsset: {fileID: 0}
