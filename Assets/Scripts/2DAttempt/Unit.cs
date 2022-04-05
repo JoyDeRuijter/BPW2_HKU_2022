@@ -24,20 +24,20 @@ public class Unit : MonoBehaviour
     public UnitStates unitState;
     [HideInInspector] public bool completedAction;
 
-    private Rigidbody rb;
+    public UIManager uiManager;
 
     #endregion
 
-    private void Start()
+    public virtual void Start()
     {
         xPos = (int)transform.position.x;
         yPos = (int)transform.position.y;
         targetPosition = new Vector3Int(xPos, yPos, -1);
         unitState = UnitStates.Waiting;
-        rb = GetComponent<Rigidbody>();
+        uiManager = UIManager.instance;
     }
 
-    private void Update()
+    public virtual void Update()
     {
         ActOnState();
         StartCoroutine(CheckForMovement());

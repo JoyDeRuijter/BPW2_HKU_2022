@@ -1,5 +1,6 @@
 // Written by Joy de Ruijter
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour
 {
@@ -38,6 +39,9 @@ public class Tile : MonoBehaviour
     private void OnMouseEnter()
     {
         //Debug.Log("Mouse hovered over " + this.name);
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         gameManager.selectedTile = this;
     }
 
@@ -48,6 +52,9 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (isInUnitRange)
             gameManager.lastClickedTile = this;
     }
