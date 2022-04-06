@@ -180,8 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345ab4e296c1fa945b382704fbbb6ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.19223925, g: 0.22363833, b: 0.23584908, a: 1}
-  offsetColor: {r: 0.19607843, g: 0.22745098, b: 0.23921569, a: 1}
+  baseColor: {r: 0.14746377, g: 0.17695652, b: 0.185, a: 1}
+  offsetColor: {r: 0.14901961, g: 0.18039216, b: 0.1882353, a: 1}
   spriteRenderer: {fileID: 3247063128924989255}
   highLight: {fileID: 665483691497865162}
   isInUnitRange: 0
