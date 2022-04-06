@@ -38,11 +38,12 @@ public class Tile : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        //Debug.Log("Mouse hovered over " + this.name);
-        if (EventSystem.current.IsPointerOverGameObject() || gameManager.gameState == GameManager.GameState.EnemyTurn)
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        if (gameManager.player.unitState != Unit.UnitStates.Action && gameManager.selectedTile != null)
         {
             gameManager.selectedTile.highLight.SetActive(false);
-            gameManager.lastClickedTile.highLight.SetActive(false);
             return;
         }
 
@@ -51,15 +52,20 @@ public class Tile : MonoBehaviour
 
     private void OnMouseExit()
     {
-        gameManager.selectedTile.highLight.SetActive(false);
+        highLight.SetActive(false);
+
+        if (gameManager.selectedTile != null)
+            gameManager.selectedTile.highLight.SetActive(false);
     }
 
     private void OnMouseDown()
     {
-        if (EventSystem.current.IsPointerOverGameObject() || gameManager.gameState == GameManager.GameState.EnemyTurn)
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        if (gameManager.player.unitState != Unit.UnitStates.Action && gameManager.selectedTile != null) 
         {
             gameManager.selectedTile.highLight.SetActive(false);
-            gameManager.lastClickedTile.highLight.SetActive(false);
             return;
         }
 
