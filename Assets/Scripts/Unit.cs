@@ -24,7 +24,8 @@ public class Unit : MonoBehaviour
     public UnitStates unitState;
     [HideInInspector] public bool completedAction;
 
-    public UIManager uiManager;
+    [HideInInspector] public UIManager uiManager;
+    [HideInInspector] public GameManager gameManager;
 
     #endregion
 
@@ -35,6 +36,7 @@ public class Unit : MonoBehaviour
         targetPosition = new Vector3Int(xPos, yPos, -1);
         unitState = UnitStates.Waiting;
         uiManager = UIManager.instance;
+        gameManager = GameManager.instance;
     }
 
     public virtual void Update()

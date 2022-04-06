@@ -24,14 +24,14 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public Tile selectedTile;
     [HideInInspector] public Tile lastClickedTile;
+    [HideInInspector] public GameState gameState;
 
     private Tile previouslySelectedTile;
-    private Player player;
+    [HideInInspector] public Player player;
     private List<Unit>units = new List<Unit>();
     private List<Enemy>enemies = new List<Enemy>();
     private int beginIndex;
-    private Dungeon.DungeonGenerator dungeonGenerator;
-    private GameState gameState;
+    [HideInInspector] public Dungeon.DungeonGenerator dungeonGenerator;
     private int activeEnemy;
 
     #endregion
@@ -54,7 +54,6 @@ public class GameManager : MonoBehaviour
     {
         MoveCameraToPlayer();
         ActOnGameState();
-        Debug.Log("Gamestate: " + gameState);
     }
 
     #region UnitTurns
