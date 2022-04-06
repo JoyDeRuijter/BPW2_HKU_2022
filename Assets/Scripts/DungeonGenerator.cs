@@ -181,6 +181,7 @@ namespace Dungeon
         {
             Vector3Int startPos = rooms[0].GetCenter();
             player = Instantiate(playerPrefab, new Vector3((float)startPos.x, (float)startPos.y, -1), Quaternion.identity);
+            player.GetComponent<Player>().name = "Player"; // Later change this into the player's self determined username
         }
 
         private void PlaceEnemies()

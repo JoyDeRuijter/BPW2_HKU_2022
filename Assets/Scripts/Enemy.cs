@@ -46,14 +46,36 @@ public class Enemy : Unit
             if (IsPossibleTile(possibleTile))
                 return;
         }
-        Debug.Log("Enemy: " + name + " could not find a new targetposition");
+        if (AlternativePossibleTile())
+            return;
+        else
+            completedAction = true;
+    }
+
+    private bool AlternativePossibleTile()
+    {
+        if (IsPossibleTile(new Vector3Int(xPos + 1, yPos, 0)))
+            return true;
+        else if (IsPossibleTile(new Vector3Int(xPos - 1, yPos, 0)))
+            return true;
+        else if (IsPossibleTile(new Vector3Int(xPos, yPos + 1, 0)))
+            return true;
+        else if (IsPossibleTile(new Vector3Int(xPos, yPos - 1, 0)))
+            return true;
+        else return false;
     }
 
     private bool IsPossibleTile(Vector3Int possibleTilePosition)
     {
-        if (gameManager.dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor)
+        Tile possibleTile = gameManager.PositionToTile(possibleTilePosition);
+        if (gameManager.dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && !possibleTile.isOccupied)
         {
             targetPosition = new Vector3Int(possibleTilePosition.x, possibleTilePosition.y, -1);
+            return true;
+        }
+        else if (gameManager.dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && gameManager.WhatIsOnTile(possibleTile) == "Player")
+        {
+            Attack(this, gameManager.player);
             return true;
         }
         else

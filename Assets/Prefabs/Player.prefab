@@ -2748,6 +2748,7 @@ MonoBehaviour:
   unitState: 0
   completedAction: 0
   uiManager: {fileID: 0}
+  gameManager: {fileID: 0}
   materials:
   - {fileID: 2100000, guid: 42b64fdb315e3054ea757d8d1c4bcfa7, type: 2}
   - {fileID: 2100000, guid: 0574116a7188c654ab34fcd54a2d0ecc, type: 2}

@@ -71,7 +71,6 @@ public class UIManager : MonoBehaviour
     public void OnPlayerPanelButtonClick()
     {
         playerPanelAnim.SetBool("ShouldOpen", !playerPanelAnim.GetBool("ShouldOpen"));
-        Debug.Log("Detects panel button click");
     }
 
     public void ChangeHeroImage(int index)

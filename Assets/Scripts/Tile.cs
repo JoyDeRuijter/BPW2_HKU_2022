@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     public GameObject highLight;
 
-
+    [HideInInspector] public bool isOccupied;
     [HideInInspector] public bool isInUnitRange;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;
@@ -34,6 +34,14 @@ public class Tile : MonoBehaviour
     public void Initialize(bool isOffset)
     {
         spriteRenderer.color = isOffset ? offsetColor : baseColor;
+    }
+
+    private void FixedUpdate()
+    {
+        if (gameManager.WhatIsOnTile(this) == "Empty")
+            isOccupied = false;
+        else
+            isOccupied = true;
     }
 
     private void OnMouseEnter()

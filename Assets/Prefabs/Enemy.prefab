@@ -51,7 +51,7 @@ MonoBehaviour:
   movementSpeed: 2
   level: 1
   damage: 20
-  maxHealth: 100
+  maxHealth: 50
   outliner: {fileID: 1016907565076023250}
   currentHealth: 0
   xPos: 0
@@ -60,6 +60,9 @@ MonoBehaviour:
   isMoving: 0
   unitState: 0
   completedAction: 0
+  uiManager: {fileID: 0}
+  gameManager: {fileID: 0}
+  enemyType: 0
 --- !u!114 &1016907565076023250
 MonoBehaviour:
   m_ObjectHideFlags: 0

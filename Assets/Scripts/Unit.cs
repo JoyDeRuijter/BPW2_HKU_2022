@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     [Header("References")]
     [SerializeField] private Outline outliner;
 
-    [HideInInspector] public int currentHealth;
+    public int currentHealth;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;
     [HideInInspector] public Vector3Int targetPosition;
@@ -37,6 +37,7 @@ public class Unit : MonoBehaviour
         unitState = UnitStates.Waiting;
         uiManager = UIManager.instance;
         gameManager = GameManager.instance;
+        currentHealth = maxHealth;
     }
 
     public virtual void Update()
@@ -59,9 +60,7 @@ public class Unit : MonoBehaviour
             }
             xPos = (int)transform.position.x;
             yPos = (int)transform.position.y;
-            completedAction = true;
-
-            
+            completedAction = true; 
         }
     }
 
@@ -96,6 +95,37 @@ public class Unit : MonoBehaviour
         else
             isMoving = false;
 
+    }
+
+    #endregion
+
+    #region UnitActions
+
+    public void Attack(Unit attacker, Unit victim)
+    {
+        // Add attack logic here
+        if (victim.currentHealth - attacker.damage <= 0)
+        {
+            victim.currentHealth = 0;
+            Die(victim);
+        }
+        else
+            victim.currentHealth -= attacker.damage;
+
+        Debug.Log("!SLAASHH! " + attacker.name + " just attacked " + victim.name);
+        completedAction = true;
+    }
+
+    public void Die(Unit victim)
+    {
+        if (victim.GetComponent<Player>() != null)
+        {
+            Debug.Log("Player died");
+            return;
+        }
+        victim.unitState = UnitStates.EndTurn;
+        gameManager.RemoveEnemyFromLists(victim.GetComponent<Enemy>());
+        Destroy(victim.gameObject);
     }
 
     #endregion
