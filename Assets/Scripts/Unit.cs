@@ -52,7 +52,7 @@ public class Unit : MonoBehaviour
     {
         if (transform.position != targetPosition && targetPosition != Vector3Int.zero)
         {
-            RotatePlayer();
+            Rotate(targetPosition);
             while (transform.position != targetPosition)
             { 
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * movementSpeed);
@@ -64,7 +64,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void RotatePlayer()
+    private void Rotate(Vector3Int targetPosition)
     {
         Vector3 lookDirection = (targetPosition - transform.position).normalized;
         switch (lookDirection)
@@ -103,7 +103,8 @@ public class Unit : MonoBehaviour
 
     public void Attack(Unit attacker, Unit victim)
     {
-        // Add attack logic here
+        Vector3Int lookPosition = new Vector3Int(victim.xPos, victim.yPos, -1);
+        Rotate(lookPosition);
         if (victim.currentHealth - attacker.damage <= 0)
         {
             victim.currentHealth = 0;
@@ -115,7 +116,6 @@ public class Unit : MonoBehaviour
         Debug.Log("!SLAASHH! " + attacker.name + " just attacked " + victim.name);
         completedAction = true;
     }
-
     public void Die(Unit victim)
     {
         if (victim.GetComponent<Player>() != null)
