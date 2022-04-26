@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7033688118991050161}
   - component: {fileID: 7683320303014061162}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: HighLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6583401645052051012}
   - component: {fileID: 3607422104060564015}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: SelectedLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,6 +266,7 @@ MonoBehaviour:
   offsetColor: {r: 0.21756338, g: 0.2595493, b: 0.271, a: 1}
   spriteRenderer: {fileID: 3247063128924989255}
   highLight: {fileID: 665483691497865162}
+  isOccupied: 0
   isInUnitRange: 0
   xPos: 0
   yPos: 0
