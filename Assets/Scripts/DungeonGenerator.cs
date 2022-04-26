@@ -28,7 +28,7 @@ namespace Dungeon
         [Space(10)]
         [SerializeField] Transform cam;
         [SerializeField] GameObject playerPrefab;
-        [SerializeField] GameObject enemyPrefab;
+        [SerializeField] GameObject[] enemyPrefabs;
 
         public Dictionary<Vector3Int, TileType> dungeon = new Dictionary<Vector3Int, TileType>();
         public List<Room> rooms = new List<Room>();
@@ -195,7 +195,7 @@ namespace Dungeon
                     if (dungeon.ContainsKey(checkPosition) && checkPosition != player.transform.position && dungeon[checkPosition] == TileType.Floor && _enemyCounter < numberOfEnemies)
                     {
                         Vector3Int spawnPosition = new Vector3Int(checkPosition.x, checkPosition.y, -1);
-                        GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+                        GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0,enemyPrefabs.Length-1)], spawnPosition, Quaternion.identity);
                         newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Goblin;
                         newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + _enemyCounter;
                         _enemyCounter++;

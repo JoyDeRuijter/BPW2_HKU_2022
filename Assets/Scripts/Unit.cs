@@ -15,14 +15,16 @@ public class Unit : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Outline outliner;
+    [SerializeField] private Animator anim;
 
     public int currentHealth;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;
     [HideInInspector] public Vector3Int targetPosition;
     [HideInInspector] public bool isMoving;
+    [HideInInspector] public bool doingAction;
     public UnitStates unitState;
-    [HideInInspector] public bool completedAction;
+    public bool completedAction;
 
     [HideInInspector] public UIManager uiManager;
     [HideInInspector] public GameManager gameManager;
@@ -42,6 +44,8 @@ public class Unit : MonoBehaviour
 
     public virtual void Update()
     {
+        if (doingAction)
+            return;
         ActOnState();
         StartCoroutine(CheckForMovement());
     }
@@ -103,19 +107,16 @@ public class Unit : MonoBehaviour
 
     public void Attack(Unit attacker, Unit victim)
     {
+        anim.SetBool("Attack", true);
+
         Vector3Int lookPosition = new Vector3Int(victim.xPos, victim.yPos, -1);
         Rotate(lookPosition);
-        if (victim.currentHealth - attacker.damage <= 0)
-        {
-            victim.currentHealth = 0;
-            Die(victim);
-        }
-        else
-            victim.currentHealth -= attacker.damage;
-
-        Debug.Log("!SLAASHH! " + attacker.name + " just attacked " + victim.name);
-        completedAction = true;
+        doingAction = true;
+        StartCoroutine(DamageDelay(1f, attacker, victim));
+        //Debug.Log("!SLAASHH! " + attacker.name + " just attacked " + victim.name);
+        StartCoroutine(AttackDelay(1.5f));
     }
+
     public void Die(Unit victim)
     {
         if (victim.GetComponent<Player>() != null)
@@ -128,11 +129,39 @@ public class Unit : MonoBehaviour
         Destroy(victim.gameObject);
     }
 
+    private IEnumerator AttackDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        Debug.Log("AttackDelay");
+        completedAction = true;
+        doingAction = false;
+        anim.SetBool("Attack", false);
+    }
+
+    private IEnumerator DamageDelay(float seconds, Unit attacker, Unit victim)
+    {
+        yield return new WaitForSeconds(seconds);
+        if (victim.currentHealth - attacker.damage <= 0)
+        {
+            victim.currentHealth = 0;
+            Die(victim);
+        }
+        else
+            victim.currentHealth -= attacker.damage;
+    }
+
     #endregion
 
     #region UnitStates
 
     public enum UnitStates {Waiting, StartTurn, Action, EndTurn};
+
+    protected virtual void EndTurn()
+    {
+        Debug.Log("ENDTURN " + gameObject.name);
+        completedAction = false;
+        unitState = UnitStates.Waiting;
+    }
 
     private void ActOnState()
     {
@@ -151,9 +180,14 @@ public class Unit : MonoBehaviour
             case UnitStates.Action:
                 StartCoroutine(Move());
                 if (completedAction)
+                {
+                    Debug.Log("completedAction" + gameObject.name);
                     unitState = UnitStates.EndTurn;
+                }
                 break;
             case UnitStates.EndTurn:
+                EndTurn();
+                //Debug.Log("endturn" + gameObject.name);
                 outliner.enabled = false;
                 break;
             default:

@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private Tile previouslySelectedTile;
     [HideInInspector] public Player player;
     private List<Unit>units = new List<Unit>();
-    [HideInInspector] public List<Enemy>enemies = new List<Enemy>();
+    public List<Enemy>enemies = new List<Enemy>();
     [HideInInspector] public List<Tile>tiles = new List<Tile>();
     private int beginIndex;
     [HideInInspector] public Dungeon.DungeonGenerator dungeonGenerator;
@@ -72,6 +72,30 @@ public class GameManager : MonoBehaviour
         units[beginIndex].unitState = Unit.UnitStates.StartTurn;
     }
 
+    public void SwitchTurnState()
+    {
+
+        if (gameState == GameState.PlayerTurn)
+        {
+            Debug.Log("switched to enemyturn");
+            activeEnemy = 0;
+            gameState = GameState.EnemyTurn;
+        }
+        else
+        {
+            Debug.Log("switched to playerturn");
+            gameState = GameState.PlayerTurn;
+        }
+    }
+
+    public void GoToNextEnemy()
+    {
+        if (activeEnemy == enemies.Count - 1)
+            SwitchTurnState();
+        else
+            activeEnemy++;
+    }
+
     private void ActOnGameState()
     {
         switch (gameState)
@@ -82,13 +106,6 @@ public class GameManager : MonoBehaviour
                     player.unitState = Unit.UnitStates.StartTurn;
                 if (player.unitState == Unit.UnitStates.Action)
                     TileToUnitMovement(player);
-                if (player.unitState == Unit.UnitStates.EndTurn)
-                {
-                    activeEnemy = 0;
-                    player.completedAction = false;
-                    gameState = GameState.EnemyTurn;
-                    player.unitState = Unit.UnitStates.Waiting;
-                }
                 break;
 
             case GameState.EnemyTurn:
@@ -99,15 +116,6 @@ public class GameManager : MonoBehaviour
                     enemies[activeEnemy].unitState = Unit.UnitStates.StartTurn;
                 if (enemies[activeEnemy].unitState == Unit.UnitStates.Action)
                     TileToUnitMovement(enemies[activeEnemy]);
-                if (enemies[activeEnemy].unitState == Unit.UnitStates.EndTurn)
-                {
-                    enemies[activeEnemy].unitState = Unit.UnitStates.Waiting;
-                    enemies[activeEnemy].completedAction = false;
-                    if (activeEnemy == enemies.Count - 1)
-                        gameState = GameState.PlayerTurn;
-                    else
-                        activeEnemy++;
-                }
                 break;
         }
     }
@@ -165,10 +173,10 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (WhatIsOnTile(selectedTile) == "Player")
-                    unit.Attack(unit, player);
-                else if (WhatIsOnTile(selectedTile) != "Empty")
-                    Debug.Log(unit.name + " can't attack his brothers");
+                //if (WhatIsOnTile(selectedTile) == "Player")
+                    //unit.Attack(unit, player);
+                //else if (WhatIsOnTile(selectedTile) != "Empty")
+                    //Debug.Log(unit.name + " can't attack his brothers");
             }
         }
     }

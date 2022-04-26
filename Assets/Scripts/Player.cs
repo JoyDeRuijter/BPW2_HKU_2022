@@ -30,4 +30,10 @@ public class Player : Unit
             index++;    
         }
     }
+
+    protected override void EndTurn()
+    {
+        base.EndTurn();
+        gameManager.SwitchTurnState();
+    }
 }

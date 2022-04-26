@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 
 public class UIManager : MonoBehaviour
@@ -25,22 +26,37 @@ public class UIManager : MonoBehaviour
     [Header("References")]
     [Space(10)]
     [SerializeField] private GameObject playerPanel;
-    [SerializeField] private GameObject statusBars;
+    [SerializeField] private GameObject experienceBar;
+    [SerializeField] private GameObject staminaBar;
+    [SerializeField] private GameObject healthBar;
+    [SerializeField] private TMP_Text experienceText;
+    [SerializeField] private TMP_Text staminaText;
+    [SerializeField] private TMP_Text healthText;
     [SerializeField] private Image HeroImage;
     [SerializeField] private Sprite[] HeroShots;
     [SerializeField] private AudioSource clickSound;
 
     private Animator playerPanelAnim;
+    private GameManager gameManager;
+    private Player player;
     
 
     #endregion
 
     private void Start()
     {
+        gameManager = GameManager.instance;
+        player = gameManager.player;
+
         if (isMainMenu)
             return;
 
         playerPanelAnim = playerPanel.GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        //UpdateHealthBar();
     }
 
     public void QuitGame()
@@ -76,5 +92,11 @@ public class UIManager : MonoBehaviour
     public void ChangeHeroImage(int index)
     {
         HeroImage.sprite = HeroShots[index];
+    }
+
+    private void UpdateHealthBar()
+    {
+        healthBar.GetComponent<Slider>().value = player.currentHealth;
+        healthText.text = player.currentHealth.ToString();
     }
 }

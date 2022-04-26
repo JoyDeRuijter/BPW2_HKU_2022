@@ -2740,6 +2740,7 @@ MonoBehaviour:
   damage: 25
   maxHealth: 100
   outliner: {fileID: 5120486571623088593}
+  anim: {fileID: 1645848872914099899}
   currentHealth: 0
   xPos: 0
   yPos: 0

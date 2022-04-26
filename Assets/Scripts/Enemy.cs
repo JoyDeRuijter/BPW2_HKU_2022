@@ -13,8 +13,14 @@ public class Enemy : Unit
     {
         base.Update();
 
-        if(unitState == UnitStates.Action)
+        if(unitState == UnitStates.Action && !doingAction)
             CalculateNewTargetPosition();
+    }
+
+    protected override void EndTurn()
+    {
+        base.EndTurn();
+        gameManager.GoToNextEnemy();
     }
 
     private void CalculateNewTargetPosition()
@@ -73,7 +79,7 @@ public class Enemy : Unit
             targetPosition = new Vector3Int(possibleTilePosition.x, possibleTilePosition.y, -1);
             return true;
         }
-        else if (gameManager.dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && gameManager.WhatIsOnTile(possibleTile) == "Player")
+        else if (gameManager.dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && gameManager.WhatIsOnTile(possibleTile) == "Player" && !completedAction)
         {
             Attack(this, gameManager.player);
             return true;
