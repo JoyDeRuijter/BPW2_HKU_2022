@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     public void GoToNextEnemy()
     {
-        if (activeEnemy == enemies.Count - 1)
+        if (enemies.Count != 0 && activeEnemy == enemies.Count - 1)
             SwitchTurnState();
         else
             activeEnemy++;
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.EnemyTurn:
-                if (enemies == null)
+                if (enemies == null || enemies.Count == 0)
                     gameState = GameState.PlayerTurn;
                 CheckUnitRange(selectedTile, enemies[activeEnemy]);
                 if (enemies[activeEnemy].unitState == Unit.UnitStates.Waiting)

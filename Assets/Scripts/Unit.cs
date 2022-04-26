@@ -114,7 +114,7 @@ public class Unit : MonoBehaviour
         doingAction = true;
         StartCoroutine(DamageDelay(1f, attacker, victim));
         //Debug.Log("!SLAASHH! " + attacker.name + " just attacked " + victim.name);
-        StartCoroutine(AttackDelay(1.5f));
+        StartCoroutine(AttackDelay(2f));
     }
 
     public void Die(Unit victim)
@@ -193,6 +193,15 @@ public class Unit : MonoBehaviour
             default:
                 break;
         }    
+    }
+
+    #endregion
+
+    #region UnitGetters
+
+    public int GetHealth()
+    {
+        return currentHealth;
     }
 
     #endregion

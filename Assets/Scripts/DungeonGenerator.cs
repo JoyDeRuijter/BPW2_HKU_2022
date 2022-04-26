@@ -195,7 +195,7 @@ namespace Dungeon
                     if (dungeon.ContainsKey(checkPosition) && checkPosition != player.transform.position && dungeon[checkPosition] == TileType.Floor && _enemyCounter < numberOfEnemies)
                     {
                         Vector3Int spawnPosition = new Vector3Int(checkPosition.x, checkPosition.y, -1);
-                        GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0,enemyPrefabs.Length-1)], spawnPosition, Quaternion.identity);
+                        GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0,enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
                         newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Goblin;
                         newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + _enemyCounter;
                         _enemyCounter++;

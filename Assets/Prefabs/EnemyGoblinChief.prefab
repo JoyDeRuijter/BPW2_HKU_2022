@@ -59,6 +59,7 @@ MonoBehaviour:
   yPos: 0
   targetPosition: {x: 0, y: 0, z: 0}
   isMoving: 0
+  doingAction: 0
   unitState: 0
   completedAction: 0
   uiManager: {fileID: 0}
@@ -1014,7 +1015,7 @@ Animator:
   m_GameObject: {fileID: 8016596155413004019}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b6ef2f4d0154b2747860a3332fa05f97, type: 3}
-  m_Controller: {fileID: 9100000, guid: 05c390d23ba0bdf4dbc1ba1abe3d4b59, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3e058992d520d7a45924187ac2a78061, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

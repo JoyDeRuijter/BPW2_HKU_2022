@@ -3488,12 +3488,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isMainMenu: 0
   playerPanel: {fileID: 1430267395}
-  experienceBar: {fileID: 1101645892}
-  staminaBar: {fileID: 817080414}
-  healthBar: {fileID: 487286466}
-  experienceText: {fileID: 83526524}
-  staminaText: {fileID: 1318490864}
-  healthText: {fileID: 696467337}
+  experienceBar: {fileID: 1101645894}
+  staminaBar: {fileID: 817080416}
+  healthBar: {fileID: 487286468}
   HeroImage: {fileID: 495316086}
   HeroShots:
   - {fileID: 21300000, guid: 3d2765d93de39594ea2ea224db2656bc, type: 3}

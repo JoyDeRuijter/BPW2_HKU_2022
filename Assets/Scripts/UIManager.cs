@@ -26,12 +26,9 @@ public class UIManager : MonoBehaviour
     [Header("References")]
     [Space(10)]
     [SerializeField] private GameObject playerPanel;
-    [SerializeField] private GameObject experienceBar;
-    [SerializeField] private GameObject staminaBar;
-    [SerializeField] private GameObject healthBar;
-    [SerializeField] private TMP_Text experienceText;
-    [SerializeField] private TMP_Text staminaText;
-    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private Slider experienceBar;
+    [SerializeField] private Slider staminaBar;
+    [SerializeField] private Slider healthBar;
     [SerializeField] private Image HeroImage;
     [SerializeField] private Sprite[] HeroShots;
     [SerializeField] private AudioSource clickSound;
@@ -46,17 +43,16 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.instance;
-        player = gameManager.player;
 
         if (isMainMenu)
             return;
-
         playerPanelAnim = playerPanel.GetComponent<Animator>();
     }
 
     private void Update()
     {
-        //UpdateHealthBar();
+        if (playerPanelAnim.GetCurrentAnimatorStateInfo(0).IsName("PlayerPanelOpenStatic"))
+            UpdateHealthBar();
     }
 
     public void QuitGame()
@@ -96,7 +92,7 @@ public class UIManager : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        healthBar.GetComponent<Slider>().value = player.currentHealth;
-        healthText.text = player.currentHealth.ToString();
+        player = gameManager.player;
+        healthBar.value = player.GetHealth();
     }
 }

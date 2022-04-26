@@ -36,6 +36,12 @@ public class Tile : MonoBehaviour
         spriteRenderer.color = isOffset ? offsetColor : baseColor;
     }
 
+    private void Update()
+    {
+        if (gameManager.gameState == GameManager.GameState.EnemyTurn && highLight.activeSelf == true)
+            highLight.SetActive(false);
+    }
+
     private void FixedUpdate()
     {
         if (gameManager.WhatIsOnTile(this) == "Empty")
