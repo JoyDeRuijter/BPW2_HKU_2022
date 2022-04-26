@@ -51,6 +51,8 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if (isMainMenu)
+            return;
         if (playerPanelAnim.GetCurrentAnimatorStateInfo(0).IsName("PlayerPanelOpenStatic"))
             UpdateHealthBar();
     }
