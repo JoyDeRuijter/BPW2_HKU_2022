@@ -77,15 +77,11 @@ public class GameManager : MonoBehaviour
 
         if (gameState == GameState.PlayerTurn)
         {
-            Debug.Log("switched to enemyturn");
             activeEnemy = 0;
             gameState = GameState.EnemyTurn;
         }
         else
-        {
-            Debug.Log("switched to playerturn");
             gameState = GameState.PlayerTurn;
-        }
     }
 
     public void GoToNextEnemy()

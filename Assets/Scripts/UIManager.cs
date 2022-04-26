@@ -26,12 +26,17 @@ public class UIManager : MonoBehaviour
     [Header("References")]
     [Space(10)]
     [SerializeField] private GameObject playerPanel;
+    [SerializeField] private GameObject healPopup;
+    [SerializeField] private GameObject damagePopup;
     [SerializeField] private Slider experienceBar;
     [SerializeField] private Slider staminaBar;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image HeroImage;
     [SerializeField] private Sprite[] HeroShots;
     [SerializeField] private AudioSource clickSound;
+    [SerializeField] private Button healButton;
+    [SerializeField] private Button damageButton;
+
 
     private Animator playerPanelAnim;
     private GameManager gameManager;
@@ -53,8 +58,22 @@ public class UIManager : MonoBehaviour
     {
         if (isMainMenu)
             return;
-        if (playerPanelAnim.GetCurrentAnimatorStateInfo(0).IsName("PlayerPanelOpenStatic"))
+        if (playerPanelAnim.GetCurrentAnimatorStateInfo(0).IsName("PlayerPanelOpenStatic") || playerPanelAnim.GetCurrentAnimatorStateInfo(0).IsName("PlayerPanelOpen"))
+        {
             UpdateHealthBar();
+            UpdateStaminaBar();
+        }
+
+        if (player != null && player.stamina != 100)
+        {
+            healButton.interactable = false;
+            damageButton.interactable = false;
+        }
+        else if (player != null && player.stamina == 100)
+        {
+            healButton.interactable = true;
+            damageButton.interactable = true;
+        }
     }
 
     public void QuitGame()
@@ -77,6 +96,13 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(seconds);
     }
 
+    private IEnumerator ShowPopup(float seconds, GameObject popup)
+    { 
+        popup.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        popup.SetActive(false);
+    }
+
     private void PlayClickSound()
     {
         clickSound.Play();
@@ -96,5 +122,25 @@ public class UIManager : MonoBehaviour
     {
         player = gameManager.player;
         healthBar.value = player.GetHealth();
+    }
+
+    private void UpdateStaminaBar()
+    {
+        player = gameManager.player;
+        staminaBar.value = player.GetStamina();
+    }
+
+    public void HealAbility()
+    {
+        player = gameManager.player;
+        StartCoroutine(ShowPopup(2f, healPopup));
+        player.UseAbility(0);
+    }
+
+    public void DamageAbility()
+    {
+        player = gameManager.player;
+        StartCoroutine(ShowPopup(2f, damagePopup));
+        player.UseAbility(1);
     }
 }

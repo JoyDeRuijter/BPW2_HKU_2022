@@ -158,7 +158,6 @@ public class Unit : MonoBehaviour
 
     protected virtual void EndTurn()
     {
-        Debug.Log("ENDTURN " + gameObject.name);
         completedAction = false;
         unitState = UnitStates.Waiting;
     }
@@ -180,14 +179,10 @@ public class Unit : MonoBehaviour
             case UnitStates.Action:
                 StartCoroutine(Move());
                 if (completedAction)
-                {
-                    Debug.Log("completedAction" + gameObject.name);
                     unitState = UnitStates.EndTurn;
-                }
                 break;
             case UnitStates.EndTurn:
                 EndTurn();
-                //Debug.Log("endturn" + gameObject.name);
                 outliner.enabled = false;
                 break;
             default:
