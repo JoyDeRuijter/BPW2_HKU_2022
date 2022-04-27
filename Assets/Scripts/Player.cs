@@ -96,4 +96,14 @@ public class Player : Unit
         coins++;
         uiManager.AddCoinObject();
     }
+
+    public void AddExperience(int xp)
+    {
+        if (experience + xp <= 100)
+            experience += xp;
+        else
+            experience = 100;
+
+        uiManager.UpdateExperience(experience);
+    }
 }

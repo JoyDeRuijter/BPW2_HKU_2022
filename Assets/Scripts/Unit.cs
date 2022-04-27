@@ -126,6 +126,7 @@ public class Unit : MonoBehaviour
         }
         Player player = this as Player;
         player.CollectCoin();
+        player.AddExperience(5);
         victim.unitState = UnitStates.EndTurn;
         gameManager.RemoveEnemyFromLists(victim.GetComponent<Enemy>());
         Destroy(victim.gameObject);

@@ -184,6 +184,10 @@ public class UIManager : MonoBehaviour
             coinIndex++;
         else
             coinIndex = 9;
+    }
 
+    public void UpdateExperience(int xp)
+    {
+        experienceBar.value = xp;
     }
 }
