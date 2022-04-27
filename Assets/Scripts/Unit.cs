@@ -124,6 +124,8 @@ public class Unit : MonoBehaviour
             Debug.Log("Player died");
             return;
         }
+        Player player = this as Player;
+        player.CollectCoin();
         victim.unitState = UnitStates.EndTurn;
         gameManager.RemoveEnemyFromLists(victim.GetComponent<Enemy>());
         Destroy(victim.gameObject);
