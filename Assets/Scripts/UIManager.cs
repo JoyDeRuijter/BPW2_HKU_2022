@@ -23,6 +23,10 @@ public class UIManager : MonoBehaviour
     [Header("Is this the Main Menu?")]
     [SerializeField] private bool isMainMenu;
 
+    [Header("Is this the Customization Menu?")]
+    [Space(10)]
+    [SerializeField] private bool isCustomizationMenu;
+
     [Header("References")]
     [Space(10)]
     [SerializeField] private GameObject playerPanel;
@@ -37,27 +41,27 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button healButton;
     [SerializeField] private Button damageButton;
 
-
     private Animator playerPanelAnim;
     private GameManager gameManager;
     private Player player;
     
-
     #endregion
 
     private void Start()
     {
         gameManager = GameManager.instance;
 
-        if (isMainMenu)
+        if (isMainMenu || isCustomizationMenu)
             return;
+
         playerPanelAnim = playerPanel.GetComponent<Animator>();
     }
 
     private void Update()
     {
-        if (isMainMenu)
+        if (isMainMenu || isCustomizationMenu)
             return;
+
         if (playerPanelAnim.GetCurrentAnimatorStateInfo(0).IsName("PlayerPanelOpenStatic") || playerPanelAnim.GetCurrentAnimatorStateInfo(0).IsName("PlayerPanelOpen"))
         {
             UpdateHealthBar();

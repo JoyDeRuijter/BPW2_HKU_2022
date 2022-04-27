@@ -197,8 +197,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 401.8719, y: 129.4708}
+  m_AnchoredPosition: {x: 0, y: 42.1}
+  m_SizeDelta: {x: 82.915, y: 47.2519}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &657742050
 MonoBehaviour:
@@ -396,8 +396,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 401.8719, y: 129.4708}
+  m_AnchoredPosition: {x: 0, y: -40.2}
+  m_SizeDelta: {x: 82.9148, y: 47.765}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &833898589
 MonoBehaviour:
@@ -529,8 +529,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 401.8719, y: 129.4708}
+  m_AnchoredPosition: {x: 0.000061035156, y: 0.000015258789}
+  m_SizeDelta: {x: 150.3844, y: 47.765}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &958709063
 MonoBehaviour:
@@ -875,6 +875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isMainMenu: 1
+  isCustomizationMenu: 0
   playerPanel: {fileID: 0}
   healPopup: {fileID: 0}
   damagePopup: {fileID: 0}
