@@ -6,17 +6,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    #region Singleton
-
-    public static GameManager instance;
-
-    private void Awake()
-    {
-        instance = this;
-    }
-
-    #endregion
-
     #region Variables
 
     [Header("References")]
@@ -37,10 +26,21 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region Singleton
+
+    public static GameManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+        player = FindObjectOfType<Player>();
+    }
+
+    #endregion
+
     private void Start()
     {
         dungeonGenerator = FindObjectOfType<Dungeon.DungeonGenerator>();
-        player = FindObjectOfType<Player>();
         units = FindObjectsOfType<Unit>().Select(unit => unit).ToList();
         foreach (Unit unit in units)
         {

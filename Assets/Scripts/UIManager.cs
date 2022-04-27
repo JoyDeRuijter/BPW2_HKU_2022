@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-
+using System.IO;
 
 public class UIManager : MonoBehaviour
 {
@@ -36,14 +36,22 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider staminaBar;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image HeroImage;
+    [SerializeField] private Image weaponImage;
     [SerializeField] private Sprite[] HeroShots;
+    [SerializeField] private Sprite[] weaponShots;
+    [SerializeField] private Material[] materials;
     [SerializeField] private AudioSource clickSound;
     [SerializeField] private Button healButton;
     [SerializeField] private Button damageButton;
+    [SerializeField] private TMP_Text heroName;
+    [SerializeField] private SkinnedMeshRenderer playerCharacter;
 
     private Animator playerPanelAnim;
     private GameManager gameManager;
     private Player player;
+
+    private SavePlayerData saver;
+    private PlayerData playerData;
     
     #endregion
 
@@ -55,6 +63,13 @@ public class UIManager : MonoBehaviour
             return;
 
         playerPanelAnim = playerPanel.GetComponent<Animator>();
+
+        saver = SavePlayerData.instance;
+
+        playerData = saver.LoadData("SaveData");
+        player = FindObjectOfType<Player>();
+        playerCharacter = player.gameObject.transform.Find("Character").transform.Find("Character_Hero_Knight_Male").GetComponent<SkinnedMeshRenderer>();
+        InitializePlayerData();
     }
 
     private void Update()
@@ -78,6 +93,14 @@ public class UIManager : MonoBehaviour
             healButton.interactable = true;
             damageButton.interactable = true;
         }
+    }
+
+    private void InitializePlayerData()
+    {
+        heroName.text = playerData.heroName;
+        HeroImage.sprite = HeroShots[playerData.armorIndex];
+        weaponImage.sprite = weaponShots[playerData.weaponIndex];
+        playerCharacter.material = materials[playerData.armorIndex];
     }
 
     public void QuitGame()

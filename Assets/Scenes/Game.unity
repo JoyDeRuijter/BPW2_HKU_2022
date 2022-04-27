@@ -4235,6 +4235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isMainMenu: 0
+  isCustomizationMenu: 0
   playerPanel: {fileID: 1430267395}
   healPopup: {fileID: 950804888}
   damagePopup: {fileID: 92058985}
@@ -4242,14 +4243,26 @@ MonoBehaviour:
   staminaBar: {fileID: 817080416}
   healthBar: {fileID: 487286468}
   HeroImage: {fileID: 495316086}
+  weaponImage: {fileID: 1065059795}
   HeroShots:
   - {fileID: 21300000, guid: 3d2765d93de39594ea2ea224db2656bc, type: 3}
   - {fileID: 21300000, guid: ba7b539a2fe57e04d873f3c826c22c06, type: 3}
   - {fileID: 21300000, guid: 05b0a04a252fca04699b92a999588615, type: 3}
   - {fileID: 21300000, guid: 4a8d99586dbe5964b92100c61947356d, type: 3}
+  weaponShots:
+  - {fileID: 21300000, guid: fccf8bd30975acd47b5f308005d5b4d7, type: 3}
+  - {fileID: 21300000, guid: 283868bfbf051fe4782ce902b7070acc, type: 3}
+  - {fileID: 21300000, guid: aea6143c1254d494998c0a9a30e19606, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 42b64fdb315e3054ea757d8d1c4bcfa7, type: 2}
+  - {fileID: 2100000, guid: 0574116a7188c654ab34fcd54a2d0ecc, type: 2}
+  - {fileID: 2100000, guid: 54061fa668860e54a8e96694301d76a9, type: 2}
+  - {fileID: 2100000, guid: e3023c0182312214e86398117753528d, type: 2}
   clickSound: {fileID: 0}
   healButton: {fileID: 368052997}
   damageButton: {fileID: 30544316}
+  heroName: {fileID: 399722163}
+  playerCharacter: {fileID: 0}
 --- !u!1 &1457730288
 GameObject:
   m_ObjectHideFlags: 0

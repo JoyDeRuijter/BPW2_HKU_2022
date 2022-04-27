@@ -1,6 +1,7 @@
 // Written by Joy de Ruijter
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class HeroCustomization : MonoBehaviour
@@ -29,12 +30,19 @@ public class HeroCustomization : MonoBehaviour
     private string[] armorNames = new string[4];
     private string[] weaponNames = new string[3];
 
+    private SavePlayerData saver;
+
     #endregion
 
     private void Awake()
     {
         InitializeArmorNames();
         InitializeWeaponNames();
+    }
+
+    private void Start()
+    {
+        saver = SavePlayerData.instance;
     }
 
     private void Update()
@@ -125,5 +133,13 @@ public class HeroCustomization : MonoBehaviour
     public void UpdateName()
     {
         playerName.text = playerNameInput.text;
+    }
+
+    public void Continue(string scene)
+    {
+        saver.CreatePlayerData(playerName.text, weaponIndex, armorIndex);
+        saver.SaveData("SaveData");
+
+        SceneManager.LoadScene(scene);
     }
 }
