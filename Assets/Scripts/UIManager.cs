@@ -40,6 +40,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite[] HeroShots;
     [SerializeField] private Sprite[] weaponShots;
     [SerializeField] private Material[] materials;
+    [SerializeField] private GameObject[] coinObjects;
+    [SerializeField] private TMP_Text coinCounter;
     [SerializeField] private AudioSource clickSound;
     [SerializeField] private Button healButton;
     [SerializeField] private Button damageButton;
@@ -52,6 +54,8 @@ public class UIManager : MonoBehaviour
 
     private SavePlayerData saver;
     private PlayerData playerData;
+
+    private int coinIndex = 0;
     
     #endregion
 
@@ -169,5 +173,17 @@ public class UIManager : MonoBehaviour
         player = gameManager.player;
         StartCoroutine(ShowPopup(2f, damagePopup));
         player.UseAbility(1);
+    }
+
+    public void AddCoinObject()
+    { 
+        coinObjects[coinIndex].SetActive(true);
+        coinCounter.text = (coinIndex + 1).ToString();
+
+        if (coinIndex < 8)
+            coinIndex++;
+        else
+            coinIndex = 9;
+
     }
 }

@@ -13,10 +13,11 @@ public class Player : Unit
     [SerializeField] private SkinnedMeshRenderer character;
 
     private int index = 0;
-    public int stamina = 100;
+    [HideInInspector] public int stamina = 100;
     [HideInInspector] public int experience = 0;
+    [HideInInspector] public int coins = 0;
 
-    public float timerValue = 50f;
+    [HideInInspector] public float timerValue = 50f;
 
     #endregion
 
@@ -26,13 +27,7 @@ public class Player : Unit
 
         // Purely for testing right now, should be used in a customization menu of some sorts or selecting an armor in inventory
         if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (index >= materials.Length) 
-                index = 0;
-            character.material = materials[index];
-            uiManager.ChangeHeroImage(index);
-            index++;    
-        }
+            CollectCoin();
 
         StaminaRegeneration();
     }
@@ -87,5 +82,18 @@ public class Player : Unit
     public int GetStamina()
     {
         return stamina;
+    }
+
+    public void CollectCoin()
+    {
+        if (coins >= 10)
+        {
+            Debug.Log("Player has already enough coins collected");
+            return;
+        }
+
+        Debug.Log("player collected a coin");
+        coins++;
+        uiManager.AddCoinObject();
     }
 }
