@@ -90,4 +90,4 @@ public class Enemy : Unit
 
 }
 
-public enum EnemyType { Goblin, GoblinChief, GoblinBoss}
+public enum EnemyType { Normal, Boss}

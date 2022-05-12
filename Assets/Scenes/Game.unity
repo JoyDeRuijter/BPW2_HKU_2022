@@ -5515,7 +5515,7 @@ MonoBehaviour:
   minRoomSize: 4
   maxRoomSize: 8
   numberOfRooms: 12
-  numberOfEnemies: 2
+  numberOfEnemies: 3
   cam: {fileID: 2125466488}
   playerPrefab: {fileID: 4611247590087903771, guid: 5fdd55489289f3c44ae9a68af809397b, type: 3}
   enemyPrefabs:

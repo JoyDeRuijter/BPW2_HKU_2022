@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Dungeon
 {
-    public enum TileType { Floor, Wall };
+    public enum TileType { Floor, Wall, Corridor };
 
     public class DungeonGenerator : MonoBehaviour
     {
@@ -34,15 +34,16 @@ namespace Dungeon
         public List<Room> rooms = new List<Room>();
 
         [HideInInspector] public GameObject player;
+        
 
         #endregion
 
         private void Awake()
         {
             Generate();
-            PlaceCamera();
-            PlacePlayer();
-            PlaceEnemies();
+            AllocateCamera();
+            AllocatePlayer();
+            AllocateEnemies();
         }
 
         public void Generate()
@@ -57,6 +58,7 @@ namespace Dungeon
                 int maxY = minY + Random.Range(minRoomSize, maxRoomSize + 1);
 
                 Room room = new Room(minX, maxX, minY, maxY);
+                room.ID = i;
 
                 if (RoomFitsInDungeon(room))
                     AddRoomToDungeon(room);
@@ -133,7 +135,7 @@ namespace Dungeon
                 if (dungeon.ContainsKey(position))
                     continue;
 
-                dungeon.Add(position, TileType.Floor);
+                dungeon.Add(position, TileType.Corridor);
             }
 
             int dirY = posTwo.y > posOne.y ? 1 : -1;
@@ -144,7 +146,7 @@ namespace Dungeon
                 if (dungeon.ContainsKey(position))
                     continue;
 
-                dungeon.Add(position, TileType.Floor);
+                dungeon.Add(position, TileType.Corridor);
             }
         }
 
@@ -167,25 +169,33 @@ namespace Dungeon
                         spawnedWalltile.name = "FloorTile_" + kvp.Key.x + "_" + kvp.Key.y;
                         spawnedWalltile.Initialize(false);
                         break;
+
+                    case TileType.Corridor:
+                        var spawnedCorridortile = Instantiate(floorPrefab, kvp.Key, Quaternion.identity, transform);
+                        spawnedCorridortile.name = "CorridorTile_" + kvp.Key.x + "_" + kvp.Key.y;
+                        var isOffset2 = (kvp.Key.x % 2 == 0 && kvp.Key.y % 2 != 0) || (kvp.Key.x % 2 != 0 && kvp.Key.y % 2 == 0);
+                        spawnedCorridortile.Initialize(isOffset2);
+                        break;
                 }
             }
         }
 
-        private void PlaceCamera()
+        private void AllocateCamera()
         {
             Vector3Int startPos = rooms[0].GetCenter();
             cam.transform.position = new Vector3((float)startPos.x, (float)startPos.y, cam.transform.position.z);
         }
 
-        private void PlacePlayer()
+        private void AllocatePlayer()
         {
             Vector3Int startPos = rooms[0].GetCenter();
             player = Instantiate(playerPrefab, new Vector3((float)startPos.x, (float)startPos.y, -1), Quaternion.identity);
-            player.GetComponent<Player>().name = "Player"; // Later change this into the player's self determined username
+            player.GetComponent<Player>().name = "Player";
         }
 
-        private void PlaceEnemies()
+        private void AllocateEnemies()
         {
+            /*
             int _enemyCounter = 0;
             for (int x = (int)player.transform.position.x - 3; x < (int)player.transform.position.x + 4; x++)
             {
@@ -196,13 +206,45 @@ namespace Dungeon
                     {
                         Vector3Int spawnPosition = new Vector3Int(checkPosition.x, checkPosition.y, -1);
                         GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0,enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
-                        newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Goblin;
+                        newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Normal;
                         newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + _enemyCounter;
                         _enemyCounter++;
                     }
                 }
+            }*/
+
+            for (int i = 1; i < rooms.Count - 1; i++)
+            {
+                int _numberOfEnemies = Random.Range(numberOfEnemies - 1, numberOfEnemies + 2);
+                for (int j = 0; j < _numberOfEnemies; j++)
+                {
+                    Vector3Int pendingPosition = rooms[i].GetRandomTile();
+
+                    if (!RoomTileIsOccupied(rooms[i], pendingPosition))
+                    {
+                        Vector3Int spawnPosition = new Vector3Int(pendingPosition.x, pendingPosition.y, -1);
+                        GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
+                        newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Normal;
+                        newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + j;
+                        rooms[i].occupiedTiles.Add(pendingPosition);
+                    }
+                }
+
             }
                 
+        }
+
+        private bool RoomTileIsOccupied(Room room, Vector3Int pendingPosition)
+        {
+            if (room.occupiedTiles.Count == 0)
+                return false;
+
+            for (int i = 0; i < room.occupiedTiles.Count; i++)
+            {
+                if (room.occupiedTiles[i] == pendingPosition)
+                    return true;
+            }
+            return false;
         }
 
     }
@@ -210,6 +252,8 @@ namespace Dungeon
     public class Room
     {
         #region Variables
+
+        public int ID;
 
         public int minX, maxX, minY, maxY;
 
@@ -221,12 +265,20 @@ namespace Dungeon
             maxY = _maxY;
         }
 
+        public List<Vector3Int> occupiedTiles = new List<Vector3Int>();
+
         #endregion
 
         public Vector3Int GetCenter()
         {
             return new Vector3Int(Mathf.RoundToInt(Mathf.Lerp(minX, maxX, 0.5f)), Mathf.RoundToInt(Mathf.Lerp(minY, maxY, 0.5f)), 0);
         }
+
+        
+        public Vector3Int GetRandomTile()
+        {
+            return new Vector3Int(Mathf.RoundToInt(Random.Range(minX, maxX + 1)), Mathf.RoundToInt(Random.Range(minY, maxY + 1)), 0);
+        }    
     }
 }
 
