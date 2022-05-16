@@ -171,10 +171,15 @@ public class GameManager : MonoBehaviour
             {
                 if (WhatIsOnTile(selectedTile) != "Player" && WhatIsOnTile(selectedTile) != "Empty") // Change this later when items or another type is added to the whatisontile method
                 {
-                    for (int i = 0; i < enemies.Count; i++)
-                    {
-                        if (enemies[i].name == WhatIsOnTile(selectedTile))
-                            unit.Attack(unit, enemies[i]);
+                    string attackedEnemy = "";
+                    for (int i = 0; i < enemiesInRoom.Count; i++)
+                    { 
+                        if (enemiesInRoom[i].name == WhatIsOnTile(selectedTile) && enemiesInRoom[i].name != attackedEnemy)
+                        {
+                            attackedEnemy = enemiesInRoom[i].name;
+                            Debug.Log("attackedEnemy = " + enemiesInRoom[i].name);
+                            unit.Attack(unit, enemiesInRoom[i]);
+                        }
                     }
                 }
             }
@@ -189,10 +194,10 @@ public class GameManager : MonoBehaviour
         if (player.xPos == tile.xPos && player.yPos == tile.yPos)
             return "Player";
 
-        for (int i = 0; i < enemies.Count; i++)
+        for (int i = 0; i < enemiesInRoom.Count; i++)
         {
-            if (enemies[i].xPos == tile.xPos && enemies[i].yPos == tile.yPos)
-                return enemies[i].name;
+            if (enemiesInRoom[i].xPos == tile.xPos && enemiesInRoom[i].yPos == tile.yPos)
+                return enemiesInRoom[i].name;
         }
         // check for items/obstacles/e.g.
 
@@ -227,6 +232,7 @@ public class GameManager : MonoBehaviour
             if (unit.gameObject.TryGetComponent<Player>(out Player player))
                 continue;
             enemies.Add(unit.gameObject.GetComponent<Enemy>());
+            enemiesInRoom.Add(unit.gameObject.GetComponent<Enemy>());
         }
     }
 

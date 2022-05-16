@@ -200,7 +200,7 @@ namespace Dungeon
 
         private void AllocateEnemies()
         {
-            for (int i = 1; i < rooms.Count - 1; i++)
+            for (int i = 0; i < rooms.Count - 1; i++)
             {
                 int _numberOfEnemies = Random.Range(numberOfEnemies - 1, numberOfEnemies + 1);
                 for (int j = 0; j < _numberOfEnemies; j++)
@@ -212,7 +212,7 @@ namespace Dungeon
                         Vector3Int spawnPosition = new Vector3Int(pendingPosition.x, pendingPosition.y, -1);
                         GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
                         newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Normal;
-                        newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + j;
+                        newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + j + "_" + i;
                         newEnemy.GetComponent<Enemy>().roomID = rooms[i].ID;
                         rooms[i].occupiedTiles.Add(pendingPosition);
                     }

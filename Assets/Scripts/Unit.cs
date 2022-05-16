@@ -120,6 +120,11 @@ public class Unit : MonoBehaviour
         StartCoroutine(AttackDelay(2f));
     }
 
+    public void TakeDamage(int _damage)
+    { 
+        currentHealth -= _damage;
+    }
+
     public void Die(Unit victim)
     {
         if (victim.GetComponent<Player>() != null)
@@ -145,16 +150,19 @@ public class Unit : MonoBehaviour
 
     private IEnumerator DamageDelay(float seconds, Unit attacker, Unit victim)
     {
-        bool hasDied = false;
         yield return new WaitForSeconds(seconds);
-        if (victim.currentHealth - attacker.damage <= 0 && !hasDied)
+        //Debug.Log("DAMAGEDELAY: " + attacker.name + " does " + attacker.damage + " to " + victim.name + " with " + victim.currentHealth);
+        if (victim.currentHealth - attacker.damage <= 0)
         {
-            hasDied = true;
+            //Debug.Log("unity thinks " + victim.gameObject.name + " should die?");
             victim.currentHealth = 0;
             Die(victim);
         }
         else
-            victim.currentHealth -= attacker.damage;
+        {
+            victim.TakeDamage(attacker.damage);
+            //Debug.Log("unity thinks " + victim.gameObject.name + " should get " + attacker.damage + " damage");
+        }
     }
 
     #endregion
