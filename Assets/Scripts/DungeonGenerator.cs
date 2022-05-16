@@ -191,28 +191,11 @@ namespace Dungeon
             Vector3Int startPos = rooms[0].GetCenter();
             player = Instantiate(playerPrefab, new Vector3((float)startPos.x, (float)startPos.y, -1), Quaternion.identity);
             player.GetComponent<Player>().name = "Player";
+            player.GetComponent<Player>().roomID = rooms[0].ID;
         }
 
         private void AllocateEnemies()
         {
-            /*
-            int _enemyCounter = 0;
-            for (int x = (int)player.transform.position.x - 3; x < (int)player.transform.position.x + 4; x++)
-            {
-                for (int y = (int)player.transform.position.y - 3; y < (int)player.transform.position.y + 4; y++)
-                {
-                    Vector3Int checkPosition = new Vector3Int(x, y, 0);
-                    if (dungeon.ContainsKey(checkPosition) && checkPosition != player.transform.position && dungeon[checkPosition] == TileType.Floor && _enemyCounter < numberOfEnemies)
-                    {
-                        Vector3Int spawnPosition = new Vector3Int(checkPosition.x, checkPosition.y, -1);
-                        GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0,enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
-                        newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Normal;
-                        newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + _enemyCounter;
-                        _enemyCounter++;
-                    }
-                }
-            }*/
-
             for (int i = 1; i < rooms.Count - 1; i++)
             {
                 int _numberOfEnemies = Random.Range(numberOfEnemies - 1, numberOfEnemies + 2);
@@ -226,12 +209,11 @@ namespace Dungeon
                         GameObject newEnemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], spawnPosition, Quaternion.identity);
                         newEnemy.GetComponent<Enemy>().enemyType = EnemyType.Normal;
                         newEnemy.GetComponent<Enemy>().name = newEnemy.GetComponent<Enemy>().enemyType.ToString() + "_" + j;
+                        newEnemy.GetComponent<Enemy>().roomID = rooms[i].ID;
                         rooms[i].occupiedTiles.Add(pendingPosition);
                     }
                 }
-
-            }
-                
+            }       
         }
 
         private bool RoomTileIsOccupied(Room room, Vector3Int pendingPosition)
@@ -245,6 +227,22 @@ namespace Dungeon
                     return true;
             }
             return false;
+        }
+
+        //WAS WORKING HERE!!
+        public int UnitRoomID(Unit unit)
+        {
+           Vector3Int unitPosition = new Vector3Int(unit.xPos, unit.yPos, 0);
+            if (dungeon.ContainsKey(unitPosition) && dungeon[unitPosition] == TileType.Floor)
+            {
+                for (int i = 0; i < rooms.Count; i++)
+                {
+                    if (rooms[i].HasThisTile(unit.xPos, unit.yPos))
+                        return rooms[i].ID;
+                }
+                Debug.Log("No rooms where found with a tile on the position of " + unit.name);
+            }
+            return -1;
         }
 
     }
@@ -274,11 +272,17 @@ namespace Dungeon
             return new Vector3Int(Mathf.RoundToInt(Mathf.Lerp(minX, maxX, 0.5f)), Mathf.RoundToInt(Mathf.Lerp(minY, maxY, 0.5f)), 0);
         }
 
-        
         public Vector3Int GetRandomTile()
         {
             return new Vector3Int(Mathf.RoundToInt(Random.Range(minX, maxX + 1)), Mathf.RoundToInt(Random.Range(minY, maxY + 1)), 0);
-        }    
+        }
+
+        public bool HasThisTile(int xPos, int yPos)
+        {
+            if ((xPos >= minX && xPos <= maxX) && (yPos >= minY && yPos <= maxY))
+                return true;
+            return false;
+        }
     }
 }
 

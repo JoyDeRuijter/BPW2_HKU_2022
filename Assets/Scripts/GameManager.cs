@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Player player;
     private List<Unit>units = new List<Unit>();
     public List<Enemy>enemies = new List<Enemy>();
+    public List<Enemy>enemiesInRoom = new List<Enemy>();
     [HideInInspector] public List<Tile>tiles = new List<Tile>();
     private int beginIndex;
     [HideInInspector] public Dungeon.DungeonGenerator dungeonGenerator;
@@ -34,13 +35,13 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         player = FindObjectOfType<Player>();
+        dungeonGenerator = FindObjectOfType<Dungeon.DungeonGenerator>();
     }
 
     #endregion
 
     private void Start()
     {
-        dungeonGenerator = FindObjectOfType<Dungeon.DungeonGenerator>();
         units = FindObjectsOfType<Unit>().Select(unit => unit).ToList();
         foreach (Unit unit in units)
         {
@@ -86,7 +87,7 @@ public class GameManager : MonoBehaviour
 
     public void GoToNextEnemy()
     {
-        if (enemies.Count != 0 && activeEnemy == enemies.Count - 1)
+        if (enemiesInRoom.Count != 0 && activeEnemy == enemiesInRoom.Count - 1)
             SwitchTurnState();
         else
             activeEnemy++;
@@ -105,13 +106,23 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.EnemyTurn:
-                if (enemies == null || enemies.Count == 0)
+                if (player.isInRoom)
+                    UpdateEnemiesInRoom(player.roomID);
+                else
+                {
                     gameState = GameState.PlayerTurn;
-                CheckUnitRange(selectedTile, enemies[activeEnemy]);
-                if (enemies[activeEnemy].unitState == Unit.UnitStates.Waiting)
-                    enemies[activeEnemy].unitState = Unit.UnitStates.StartTurn;
-                if (enemies[activeEnemy].unitState == Unit.UnitStates.Action)
-                    TileToUnitMovement(enemies[activeEnemy]);
+                    break;
+                }
+                if (enemiesInRoom == null || enemiesInRoom.Count == 0)
+                {
+                    gameState = GameState.PlayerTurn;
+                    break;
+                }
+                CheckUnitRange(selectedTile, enemiesInRoom[activeEnemy]);
+                if (enemiesInRoom[activeEnemy].unitState == Unit.UnitStates.Waiting)
+                    enemiesInRoom[activeEnemy].unitState = Unit.UnitStates.StartTurn;
+                if (enemiesInRoom[activeEnemy].unitState == Unit.UnitStates.Action)
+                    TileToUnitMovement(enemiesInRoom[activeEnemy]);
                 break;
         }
     }
@@ -131,7 +142,7 @@ public class GameManager : MonoBehaviour
         Vector2Int unitPosition = new Vector2Int(unit.xPos, unit.yPos);
         float distance = Vector2Int.Distance(tilePosition, unitPosition);
 
-        if (distance == 1 && dungeonGenerator.dungeon[tilePositionDungeon] == Dungeon.TileType.Floor &&
+        if (distance == 1 && (dungeonGenerator.dungeon[tilePositionDungeon] == Dungeon.TileType.Floor || dungeonGenerator.dungeon[tilePositionDungeon] == Dungeon.TileType.Corridor) &&
             (unit.unitState == Unit.UnitStates.StartTurn || unit.unitState == Unit.UnitStates.Action))
         {
             tile.isInUnitRange = true;
@@ -166,13 +177,6 @@ public class GameManager : MonoBehaviour
                             unit.Attack(unit, enemies[i]);
                     }
                 }
-            }
-            else
-            {
-                //if (WhatIsOnTile(selectedTile) == "Player")
-                    //unit.Attack(unit, player);
-                //else if (WhatIsOnTile(selectedTile) != "Empty")
-                    //Debug.Log(unit.name + " can't attack his brothers");
             }
         }
     }
@@ -216,6 +220,7 @@ public class GameManager : MonoBehaviour
     { 
         units.Clear();
         enemies.Clear();
+        enemiesInRoom.Clear();
         units = FindObjectsOfType<Unit>().Select(unit => unit).ToList();
         foreach (Unit unit in units)
         {
@@ -228,7 +233,18 @@ public class GameManager : MonoBehaviour
     public void RemoveEnemyFromLists(Enemy enemy)
     { 
         enemies.Remove(enemy);
+        enemiesInRoom.Remove(enemy);
         units.Remove(enemy);
+    }
+
+    public void UpdateEnemiesInRoom(int playerRoomID)
+    { 
+        enemiesInRoom.Clear();
+        foreach (Enemy enemy in enemies)
+        { 
+            if(enemy.roomID == playerRoomID)
+                enemiesInRoom.Add(enemy);
+        }
     }
 
     #endregion

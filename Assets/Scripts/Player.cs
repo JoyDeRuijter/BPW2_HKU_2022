@@ -19,6 +19,8 @@ public class Player : Unit
 
     [HideInInspector] public float timerValue = 50f;
 
+    public bool isInRoom;
+
     #endregion
 
     public override void Update()
@@ -54,6 +56,7 @@ public class Player : Unit
     {
         base.EndTurn();
         gameManager.SwitchTurnState();
+        isInRoom = IsInRoom();
     }
 
     public void UseAbility(int abilityIndex)
@@ -105,5 +108,21 @@ public class Player : Unit
             experience = 100;
 
         uiManager.UpdateExperience(experience);
+    }
+
+    private bool IsInRoom()
+    {
+        Vector3Int playerTile = new Vector3Int(xPos, yPos, 0);
+        if (dungeonGenerator.dungeon[playerTile] == Dungeon.TileType.Floor)
+        {
+            if (roomID == -1)
+                roomID = dungeonGenerator.UnitRoomID(this);
+            return true;
+        }
+        else
+        {
+            roomID = -1;
+            return false;
+        }
     }
 }

@@ -28,6 +28,8 @@ public class Unit : MonoBehaviour
 
     [HideInInspector] public UIManager uiManager;
     [HideInInspector] public GameManager gameManager;
+    protected Dungeon.DungeonGenerator dungeonGenerator;
+    [HideInInspector] public int roomID; // -1 = corridor, every other value is the ID of the room the player is in
 
     #endregion
 
@@ -40,6 +42,7 @@ public class Unit : MonoBehaviour
         uiManager = UIManager.instance;
         gameManager = GameManager.instance;
         currentHealth = maxHealth;
+        dungeonGenerator = gameManager.dungeonGenerator;
     }
 
     public virtual void Update()
@@ -135,7 +138,6 @@ public class Unit : MonoBehaviour
     private IEnumerator AttackDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        Debug.Log("AttackDelay");
         completedAction = true;
         doingAction = false;
         anim.SetBool("Attack", false);
@@ -143,9 +145,11 @@ public class Unit : MonoBehaviour
 
     private IEnumerator DamageDelay(float seconds, Unit attacker, Unit victim)
     {
+        bool hasDied = false;
         yield return new WaitForSeconds(seconds);
-        if (victim.currentHealth - attacker.damage <= 0)
+        if (victim.currentHealth - attacker.damage <= 0 && !hasDied)
         {
+            hasDied = true;
             victim.currentHealth = 0;
             Die(victim);
         }
@@ -172,7 +176,8 @@ public class Unit : MonoBehaviour
             case UnitStates.Waiting:
                 targetPosition = new Vector3Int(xPos, yPos, -1);
                 completedAction = false;
-                outliner.enabled = false;
+                if(gameManager.enemiesInRoom.Count != 0)
+                    outliner.enabled = false;
                 break;
             case UnitStates.StartTurn:
                 outliner.enabled = true;
@@ -186,7 +191,8 @@ public class Unit : MonoBehaviour
                 break;
             case UnitStates.EndTurn:
                 EndTurn();
-                outliner.enabled = false;
+                if (gameManager.enemiesInRoom.Count != 0)
+                    outliner.enabled = false;
                 break;
             default:
                 break;
