@@ -12,11 +12,15 @@ public class Potion : MonoBehaviour
     [HideInInspector] public int yPos;
 
     private SphereCollider sphereCollider;
+    private GameManager gameManager;
+    private Dungeon.DungeonGenerator dungeonGenerator;
 
     #endregion
 
     private void Start()
     {
+        gameManager = GameManager.instance;
+        dungeonGenerator = gameManager.dungeonGenerator;
         sphereCollider = GetComponent<SphereCollider>();
     }
 
@@ -27,7 +31,7 @@ public class Potion : MonoBehaviour
 
         Debug.Log("Player collected a " + potionType + " potion");
         // collect the potion
-
+        dungeonGenerator.rooms[roomID].DeleteAPotion(xPos, yPos);
         Destroy(gameObject);
     }
 

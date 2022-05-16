@@ -236,6 +236,7 @@ namespace Dungeon
                         newPotion.GetComponent<Potion>().xPos = spawnPosition.x;
                         newPotion.GetComponent<Potion>().yPos = spawnPosition.y;
                         rooms[i].occupiedTiles.Add(pendingPosition);
+                        rooms[i].potionPositions.Add(spawnPosition);
                     }
                 }
             }
@@ -289,6 +290,7 @@ namespace Dungeon
         }
 
         public List<Vector3Int> occupiedTiles = new List<Vector3Int>();
+        public List<Vector3Int> potionPositions = new List<Vector3Int>();
 
         #endregion
 
@@ -307,6 +309,31 @@ namespace Dungeon
             if ((xPos >= minX && xPos <= maxX) && (yPos >= minY && yPos <= maxY))
                 return true;
             return false;
+        }
+
+        public bool HasAPotion(int xPos, int yPos)
+        {
+            if (potionPositions.Count == 0)
+                return false;
+
+            for (int i = 0; i < potionPositions.Count; i++)
+            {
+                if (potionPositions[i].x == xPos && potionPositions[i].y == yPos)
+                    return true;
+            }
+            return false;
+        }
+
+        public void DeleteAPotion(int xPos, int yPos)
+        {
+            if (potionPositions.Count == 0)
+                return;
+
+            for (int i = 0; i < potionPositions.Count; i++)
+            {
+                if (potionPositions[i].x == xPos && potionPositions[i].y == yPos)
+                    potionPositions.Remove(potionPositions[i]);
+            }
         }
     }
 }

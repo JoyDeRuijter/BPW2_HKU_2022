@@ -78,12 +78,12 @@ public class Enemy : Unit
     private bool IsPossibleTile(Vector3Int possibleTilePosition)
     {
         Tile possibleTile = gameManager.PositionToTile(possibleTilePosition);
-        if (gameManager.dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && !possibleTile.isOccupied)
+        if (dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && !possibleTile.isOccupied && !dungeonGenerator.rooms[roomID].HasAPotion(possibleTilePosition.x, possibleTilePosition.y))
         {
             targetPosition = new Vector3Int(possibleTilePosition.x, possibleTilePosition.y, -1);
             return true;
         }
-        else if (gameManager.dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && gameManager.WhatIsOnTile(possibleTile) == "Player" && !completedAction)
+        else if (dungeonGenerator.dungeon[possibleTilePosition] == Dungeon.TileType.Floor && gameManager.WhatIsOnTile(possibleTile) == "Player" && !completedAction)
         {
             Attack(this, gameManager.player);
             return true;
