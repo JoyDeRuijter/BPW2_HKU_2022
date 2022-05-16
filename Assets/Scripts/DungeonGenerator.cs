@@ -163,7 +163,11 @@ namespace Dungeon
                         var spawnedFloortile = Instantiate(floorPrefab, kvp.Key, Quaternion.identity, transform);
                         spawnedFloortile.name = "FloorTile_" + kvp.Key.x + "_" + kvp.Key.y;
                         var isOffset = (kvp.Key.x % 2 == 0 && kvp.Key.y % 2 != 0) || (kvp.Key.x % 2 != 0 && kvp.Key.y % 2 == 0);
-                        spawnedFloortile.Initialize(isOffset);
+                        if ((kvp.Key.x >= rooms[rooms.Count - 1].minX && kvp.Key.x <= rooms[rooms.Count - 1].maxX) &&
+                            (kvp.Key.y >= rooms[rooms.Count - 1].minY && kvp.Key.y <= rooms[rooms.Count - 1].maxY))
+                            spawnedFloortile.InitializeEndRoom(isOffset);
+                        else
+                            spawnedFloortile.Initialize(isOffset);
                         break;
 
                     case TileType.Wall:

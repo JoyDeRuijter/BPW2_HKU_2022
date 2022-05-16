@@ -264,6 +264,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseColor: {r: 0.21993801, g: 0.2655876, b: 0.277, a: 1}
   offsetColor: {r: 0.21756338, g: 0.2595493, b: 0.271, a: 1}
+  endBaseColor: {r: 0.22349818, g: 0.2784314, b: 0.21960784, a: 1}
+  endOffsetColor: {r: 0.2193464, g: 0.27058825, b: 0.21568628, a: 1}
   spriteRenderer: {fileID: 3247063128924989255}
   highLight: {fileID: 665483691497865162}
   isOccupied: 0

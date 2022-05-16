@@ -9,6 +9,8 @@ public class Tile : MonoBehaviour
     [Header("Tile Colors")]
     [SerializeField] private Color baseColor;
     [SerializeField] private Color offsetColor;
+    [SerializeField] private Color endBaseColor;
+    [SerializeField] private Color endOffsetColor;
 
     [Header("References")]
     [Space (10)]
@@ -34,6 +36,11 @@ public class Tile : MonoBehaviour
     public void Initialize(bool isOffset)
     {
         spriteRenderer.color = isOffset ? offsetColor : baseColor;
+    }
+
+    public void InitializeEndRoom(bool isOffset)
+    {
+        spriteRenderer.color = isOffset ? endOffsetColor : endBaseColor;
     }
 
     private void Update()
