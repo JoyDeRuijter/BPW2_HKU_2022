@@ -1,4 +1,5 @@
-// Written by Joy de Ruijter
+// Written by Valentijn Muijrers
+// Edited and added on by Joy de Ruijter
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace Dungeon
         [SerializeField] Transform cam;
         [SerializeField] GameObject playerPrefab;
         [SerializeField] GameObject[] enemyPrefabs;
+        [SerializeField] GameObject[] potionPrefabs;
 
         public Dictionary<Vector3Int, TileType> dungeon = new Dictionary<Vector3Int, TileType>();
         public List<Room> rooms = new List<Room>();
@@ -44,6 +46,7 @@ namespace Dungeon
             AllocateCamera();
             AllocatePlayer();
             AllocateEnemies();
+            AllocatePotions();
         }
 
         public void Generate()
@@ -192,13 +195,14 @@ namespace Dungeon
             player = Instantiate(playerPrefab, new Vector3((float)startPos.x, (float)startPos.y, -1), Quaternion.identity);
             player.GetComponent<Player>().name = "Player";
             player.GetComponent<Player>().roomID = rooms[0].ID;
+            rooms[0].occupiedTiles.Add(startPos);
         }
 
         private void AllocateEnemies()
         {
             for (int i = 1; i < rooms.Count - 1; i++)
             {
-                int _numberOfEnemies = Random.Range(numberOfEnemies - 1, numberOfEnemies + 2);
+                int _numberOfEnemies = Random.Range(numberOfEnemies - 1, numberOfEnemies + 1);
                 for (int j = 0; j < _numberOfEnemies; j++)
                 {
                     Vector3Int pendingPosition = rooms[i].GetRandomTile();
@@ -214,6 +218,27 @@ namespace Dungeon
                     }
                 }
             }       
+        }
+
+        private void AllocatePotions()
+        {
+            for (int i = 0; i < rooms.Count - 1; i++)
+            {
+                int _numberOfPotions = Random.Range(0, 3);
+                for (int j = 0; j < _numberOfPotions; j++)
+                {
+                    Vector3Int pendingPosition = rooms[i].GetRandomTile();
+                    if (!RoomTileIsOccupied(rooms[i], pendingPosition))
+                    {
+                        Vector3Int spawnPosition = new Vector3Int(pendingPosition.x, pendingPosition.y, -1);
+                        GameObject newPotion = Instantiate(potionPrefabs[Random.Range(0, potionPrefabs.Length)], spawnPosition, Quaternion.identity);
+                        newPotion.GetComponent<Potion>().roomID = rooms[i].ID;
+                        newPotion.GetComponent<Potion>().xPos = spawnPosition.x;
+                        newPotion.GetComponent<Potion>().yPos = spawnPosition.y;
+                        rooms[i].occupiedTiles.Add(pendingPosition);
+                    }
+                }
+            }
         }
 
         private bool RoomTileIsOccupied(Room room, Vector3Int pendingPosition)

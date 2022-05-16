@@ -5522,6 +5522,10 @@ MonoBehaviour:
   - {fileID: 5851879503808985116, guid: 1af82415df37a464bab7f495eea44c2d, type: 3}
   - {fileID: 5851879503808985116, guid: e99ec5255565a184cbab8222519574d7, type: 3}
   - {fileID: 5851879503808985116, guid: b3b98562ccdb1a742a9092c18b26d670, type: 3}
+  potionPrefabs:
+  - {fileID: 4047114414783816520, guid: f030450270aa14843bfa91d018836d48, type: 3}
+  - {fileID: 3802662194121468962, guid: f8afebea5fcdf7b40b7607e7e9403571, type: 3}
+  - {fileID: 6761924159541333301, guid: 45d832a0335838d4db37853078fd4dd8, type: 3}
   player: {fileID: 0}
 --- !u!4 &1986122759
 Transform:
@@ -5572,6 +5576,7 @@ MonoBehaviour:
   gameState: 0
   player: {fileID: 0}
   enemies: []
+  enemiesInRoom: []
   tiles: []
   dungeonGenerator: {fileID: 0}
 --- !u!4 &1988936607
