@@ -5,13 +5,11 @@ public class Potion : MonoBehaviour
 {
     #region Variables
 
-    public enum PotionType{ Health, Experience, Stamina }
-    public PotionType potionType;
+    [SerializeField] PotionItem potionItem;
     [HideInInspector] public int roomID;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;
 
-    private SphereCollider sphereCollider;
     private GameManager gameManager;
     private Dungeon.DungeonGenerator dungeonGenerator;
 
@@ -21,7 +19,6 @@ public class Potion : MonoBehaviour
     {
         gameManager = GameManager.instance;
         dungeonGenerator = gameManager.dungeonGenerator;
-        sphereCollider = GetComponent<SphereCollider>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,11 +26,20 @@ public class Potion : MonoBehaviour
         if (other.gameObject.GetComponentInChildren<Player>() == null)
             return;
 
-        Debug.Log("Player collected a " + potionType + " potion");
-        // collect the potion
+        Debug.Log("Player collected a " + potionItem.potionType + " potion");
+
+        PickUp();
+    }
+
+    private void PickUp()
+    {
+        bool wasPickedUp = Inventory.instance.Add(potionItem);
+
+        if (!wasPickedUp)
+            return;
+
         dungeonGenerator.rooms[roomID].DeleteAPotion(xPos, yPos);
         Destroy(gameObject);
     }
-
 
 }

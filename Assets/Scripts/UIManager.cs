@@ -23,12 +23,12 @@ public class UIManager : MonoBehaviour
     [Header("Is this the Main Menu?")]
     [SerializeField] private bool isMainMenu;
 
-    [Header("Is this the Customization Menu?")]
     [Space(10)]
+    [Header("Is this the Customization Menu?")]
     [SerializeField] private bool isCustomizationMenu;
 
-    [Header("References")]
     [Space(10)]
+    [Header("References")]
     [SerializeField] private GameObject playerPanel;
     [SerializeField] private GameObject healPopup;
     [SerializeField] private GameObject damagePopup;
@@ -47,6 +47,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button damageButton;
     [SerializeField] private TMP_Text heroName;
     [SerializeField] private SkinnedMeshRenderer playerCharacter;
+
+    [Space(10)]
+    [Header("Inventory")]
+    public Transform itemsParent;
+    public GameObject potionPopupHealth;
+    public GameObject potionPopupExperience;
+    public GameObject potionPopupStamina;
+
+    private Inventory inventory;
+    private InventorySlot[] slots;
 
     private Animator playerPanelAnim;
     private GameManager gameManager;
@@ -74,6 +84,10 @@ public class UIManager : MonoBehaviour
         player = FindObjectOfType<Player>();
         playerCharacter = player.gameObject.transform.Find("Character").transform.Find("Character_Hero_Knight_Male").GetComponent<SkinnedMeshRenderer>();
         InitializePlayerData();
+
+        inventory = Inventory.instance;
+        inventory.onItemChangedCallback += UpdateInventoryUI;
+        slots = itemsParent.GetComponentsInChildren<InventorySlot>();
     }
 
     private void Update()
@@ -149,16 +163,27 @@ public class UIManager : MonoBehaviour
         HeroImage.sprite = HeroShots[index];
     }
 
-    private void UpdateHealthBar()
+    public void UpdateHealthBar()
     {
         player = gameManager.player;
         healthBar.value = player.GetHealth();
     }
 
-    private void UpdateStaminaBar()
+    public void UpdateStaminaBar()
     {
         player = gameManager.player;
         staminaBar.value = player.GetStamina();
+    }
+
+    public void UpdateInventoryUI()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (i < inventory.potionItems.Count)
+                slots[i].AddPotionItem(inventory.potionItems[i]);
+            else
+                slots[i].ClearSlot();
+        }
     }
 
     public void HealAbility()
@@ -189,5 +214,10 @@ public class UIManager : MonoBehaviour
     public void UpdateExperience(int xp)
     {
         experienceBar.value = xp;
+    }
+
+    public void ShowPotionPopup(float seconds, GameObject popup)
+    {
+        StartCoroutine(ShowPopup(seconds, popup));
     }
 }

@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523557e5668b2754e948a2b99959ddfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  potionType: 2
+  potionItem: {fileID: 11400000, guid: 4f08128b104c6d849ae12a3121954a80, type: 2}
   roomID: 2
   xPos: 11
   yPos: 28

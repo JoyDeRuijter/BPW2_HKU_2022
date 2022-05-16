@@ -27,10 +27,6 @@ public class Player : Unit
     {
         base.Update();
 
-        // Purely for testing right now, should be used in a customization menu of some sorts or selecting an armor in inventory
-        if (Input.GetKeyDown(KeyCode.T))
-            CollectCoin();
-
         StaminaRegeneration();
     }
 
@@ -108,6 +104,26 @@ public class Player : Unit
             experience = 100;
 
         uiManager.UpdateExperience(experience);
+    }
+
+    public void AddHealth(int health)
+    {
+        if (currentHealth + health <= maxHealth)
+            currentHealth += health;
+        else
+            currentHealth = maxHealth;
+
+        uiManager.UpdateHealthBar();
+    }
+
+    public void AddStamina(int _stamina)
+    {
+        if (stamina + _stamina <= 100)
+            stamina += _stamina;
+        else
+            stamina = 100;
+
+        uiManager.UpdateStaminaBar();
     }
 
     private bool IsInRoom()
