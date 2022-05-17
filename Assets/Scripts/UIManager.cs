@@ -55,6 +55,12 @@ public class UIManager : MonoBehaviour
     public GameObject potionPopupExperience;
     public GameObject potionPopupStamina;
 
+    [Space(10)]
+    [Header("Guard Dialogue")]
+    private Guard guard;
+    public GameObject acquireDialogue;
+    public GameObject giveDialogue;
+
     private Inventory inventory;
     private InventorySlot[] slots;
 
@@ -88,6 +94,8 @@ public class UIManager : MonoBehaviour
         inventory = Inventory.instance;
         inventory.onItemChangedCallback += UpdateInventoryUI;
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
+
+        guard = FindObjectOfType<Guard>();
     }
 
     private void Update()
@@ -141,7 +149,7 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(seconds);
     }
 
-    private IEnumerator ShowPopup(float seconds, GameObject popup)
+    public IEnumerator ShowPopup(float seconds, GameObject popup)
     { 
         popup.SetActive(true);
         yield return new WaitForSeconds(seconds);
@@ -219,5 +227,10 @@ public class UIManager : MonoBehaviour
     public void ShowPotionPopup(float seconds, GameObject popup)
     {
         StartCoroutine(ShowPopup(seconds, popup));
+    }
+
+    public void HideDialogue(GameObject dialogueObject)
+    {
+        guard.HideDialogue(dialogueObject);
     }
 }

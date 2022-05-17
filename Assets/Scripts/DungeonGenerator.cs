@@ -29,6 +29,7 @@ namespace Dungeon
         [Space(10)]
         [SerializeField] Transform cam;
         [SerializeField] GameObject playerPrefab;
+        [SerializeField] GameObject guardPrefab;
         [SerializeField] GameObject[] enemyPrefabs;
         [SerializeField] GameObject[] potionPrefabs;
 
@@ -47,6 +48,7 @@ namespace Dungeon
             AllocatePlayer();
             AllocateEnemies();
             AllocatePotions();
+            AllocateGuard();
         }
 
         public void Generate()
@@ -244,6 +246,16 @@ namespace Dungeon
                     }
                 }
             }
+        }
+
+        private void AllocateGuard()
+        {
+            Vector3Int startPos = rooms[rooms.Count - 1].GetCenter();
+            GameObject guard = Instantiate(guardPrefab, new Vector3((float)startPos.x, (float)startPos.y, -1), Quaternion.identity);
+            guard.GetComponent<Guard>().roomID = rooms[rooms.Count - 1].ID;
+            guard.GetComponent<Guard>().xPos = startPos.x;
+            guard.GetComponent<Guard>().yPos = startPos.y;
+            rooms[rooms.Count - 1].occupiedTiles.Add(startPos); ;
         }
 
         private bool RoomTileIsOccupied(Room room, Vector3Int pendingPosition)

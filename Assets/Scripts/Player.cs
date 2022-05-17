@@ -86,12 +86,7 @@ public class Player : Unit
     public void CollectCoin()
     {
         if (coins >= 10)
-        {
-            Debug.Log("Player has already enough coins collected");
             return;
-        }
-
-        Debug.Log("player collected a coin");
         coins++;
         uiManager.AddCoinObject();
     }
@@ -126,7 +121,7 @@ public class Player : Unit
         uiManager.UpdateStaminaBar();
     }
 
-    private bool IsInRoom()
+    public bool IsInRoom()
     {
         Vector3Int playerTile = new Vector3Int(xPos, yPos, 0);
         if (dungeonGenerator.dungeon[playerTile] == Dungeon.TileType.Floor)

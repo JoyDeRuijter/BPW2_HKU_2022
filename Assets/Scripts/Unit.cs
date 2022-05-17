@@ -130,6 +130,7 @@ public class Unit : MonoBehaviour
         if (victim.GetComponent<Player>() != null)
         {
             Debug.Log("Player died");
+            uiManager.PlayScene("DeathScene");
             return;
         }
         Player player = this as Player;
@@ -184,7 +185,7 @@ public class Unit : MonoBehaviour
             case UnitStates.Waiting:
                 targetPosition = new Vector3Int(xPos, yPos, -1);
                 completedAction = false;
-                if(gameManager.enemiesInRoom.Count != 0)
+                if (gameManager.player.IsInRoom() && gameManager.enemiesInRoom.Count != 0)
                     outliner.enabled = false;
                 break;
             case UnitStates.StartTurn:
@@ -199,7 +200,7 @@ public class Unit : MonoBehaviour
                 break;
             case UnitStates.EndTurn:
                 EndTurn();
-                if (gameManager.enemiesInRoom.Count != 0)
+                if (gameManager.player.IsInRoom() && gameManager.enemiesInRoom.Count != 0)
                     outliner.enabled = false;
                 break;
             default:

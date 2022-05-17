@@ -883,10 +883,21 @@ MonoBehaviour:
   staminaBar: {fileID: 0}
   healthBar: {fileID: 0}
   HeroImage: {fileID: 0}
+  weaponImage: {fileID: 0}
   HeroShots: []
+  weaponShots: []
+  materials: []
+  coinObjects: []
+  coinCounter: {fileID: 0}
   clickSound: {fileID: 0}
   healButton: {fileID: 0}
   damageButton: {fileID: 0}
+  heroName: {fileID: 0}
+  playerCharacter: {fileID: 0}
+  itemsParent: {fileID: 0}
+  potionPopupHealth: {fileID: 0}
+  potionPopupExperience: {fileID: 0}
+  potionPopupStamina: {fileID: 0}
 --- !u!1 &1123348170
 GameObject:
   m_ObjectHideFlags: 0

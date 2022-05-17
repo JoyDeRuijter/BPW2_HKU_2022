@@ -177,7 +177,6 @@ public class GameManager : MonoBehaviour
                         if (enemiesInRoom[i].name == WhatIsOnTile(selectedTile) && enemiesInRoom[i].name != attackedEnemy)
                         {
                             attackedEnemy = enemiesInRoom[i].name;
-                            Debug.Log("attackedEnemy = " + enemiesInRoom[i].name);
                             unit.Attack(unit, enemiesInRoom[i]);
                         }
                     }
