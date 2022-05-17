@@ -12,13 +12,16 @@ EditorBuildSettings:
     path: Assets/Scenes/Customization.unity
     guid: d9f1afc92862a4b4ba5722910a49812a
   - enabled: 1
-    path: Assets/Scenes/Settings.unity
-    guid: 9ab7cd7a79ed87a4aab5cc47d4eb95d2
-  - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: cefa5783a65f816428699f775b0ba346
   - enabled: 1
     path: Assets/Scenes/EndDialogue.unity
     guid: a22a2459bbf1a5a4890dfc8b69a7b4da
+  - enabled: 1
+    path: Assets/Scenes/DeathScene.unity
+    guid: 2817201b1dcf7004cad0fa3910cfec27
+  - enabled: 1
+    path: Assets/Scenes/EndTitle.unity
+    guid: 4bce99ec2b681c84697273ef4d5c2043
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
