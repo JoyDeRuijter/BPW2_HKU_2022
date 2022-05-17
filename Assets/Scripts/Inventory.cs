@@ -20,6 +20,7 @@ public class Inventory : MonoBehaviour
 
     #region Variables
 
+    [Header("Properties")]
     public int capacity = 6;
     public List<PotionItem> potionItems = new List<PotionItem>();
     public delegate void OnItemChanged();

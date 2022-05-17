@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class SavePlayerData : MonoBehaviour
 {
-    #region Variables
-
     #region Singleton
 
     public static SavePlayerData instance;
@@ -18,9 +16,10 @@ public class SavePlayerData : MonoBehaviour
 
     #endregion
 
+    #region Variables
+
     private PlayerData playerData;
     private string path = "";
-    private string persistentPath = "";
 
     [HideInInspector] public string tempData;
 
@@ -31,15 +30,14 @@ public class SavePlayerData : MonoBehaviour
         playerData = new PlayerData(heroName, weaponIndex, armorIndex);
     }
 
-    private void SetPaths(string fileName)
+    private void SetPath(string fileName)
     {
         path = Application.dataPath + Path.AltDirectorySeparatorChar + fileName + ".json";
-        persistentPath = Application.persistentDataPath + Path.AltDirectorySeparatorChar + fileName + ".json";
     }
 
     public void SaveData(string fileName)
     {
-        SetPaths(fileName);
+        SetPath(fileName);
         string savePath = path;
         string json = JsonUtility.ToJson(playerData);
         using StreamWriter writer = new StreamWriter(savePath);
@@ -50,7 +48,7 @@ public class SavePlayerData : MonoBehaviour
 
     public PlayerData LoadData(string fileName)
     {
-        SetPaths(fileName);
+        SetPath(fileName);
         using StreamReader reader = new StreamReader(path);
         string json = reader.ReadToEnd();
         PlayerData data = JsonUtility.FromJson<PlayerData>(json);

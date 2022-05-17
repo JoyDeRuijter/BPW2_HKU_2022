@@ -129,9 +129,10 @@ public class UIManager : MonoBehaviour
         playerCharacter.material = materials[playerData.armorIndex];
     }
 
+    #region SceneManagement
+
     public void QuitGame()
     {
-        //PlayClickSound();
         StartCoroutine(Wait(0.5f));
         Debug.Log("Quit game");
         Application.Quit();
@@ -139,36 +140,17 @@ public class UIManager : MonoBehaviour
 
     public void PlayScene(string scene)
     {
-        //PlayClickSound();
         StartCoroutine(Wait(0.5f));
         SceneManager.LoadScene(scene);
     }
 
-    private IEnumerator Wait(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-    }
+    #endregion
 
-    public IEnumerator ShowPopup(float seconds, GameObject popup)
-    { 
-        popup.SetActive(true);
-        yield return new WaitForSeconds(seconds);
-        popup.SetActive(false);
-    }
+    #region Update Player Stats & UI
 
-    private void PlayClickSound()
+    public void UpdateExperience(int xp)
     {
-        clickSound.Play();
-    }
-
-    public void OnPlayerPanelButtonClick()
-    {
-        playerPanelAnim.SetBool("ShouldOpen", !playerPanelAnim.GetBool("ShouldOpen"));
-    }
-
-    public void ChangeHeroImage(int index)
-    {
-        HeroImage.sprite = HeroShots[index];
+        experienceBar.value = xp;
     }
 
     public void UpdateHealthBar()
@@ -194,6 +176,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ChangeHeroImage(int index)
+    {
+        HeroImage.sprite = HeroShots[index];
+    }
+
+    #endregion
+
+    #region Player Abilities
+
     public void HealAbility()
     {
         player = gameManager.player;
@@ -208,6 +199,10 @@ public class UIManager : MonoBehaviour
         player.UseAbility(1);
     }
 
+    #endregion
+
+    #region Other Canvas Elements
+
     public void AddCoinObject()
     { 
         coinObjects[coinIndex].SetActive(true);
@@ -219,11 +214,6 @@ public class UIManager : MonoBehaviour
             coinIndex = 9;
     }
 
-    public void UpdateExperience(int xp)
-    {
-        experienceBar.value = xp;
-    }
-
     public void ShowPotionPopup(float seconds, GameObject popup)
     {
         StartCoroutine(ShowPopup(seconds, popup));
@@ -233,4 +223,23 @@ public class UIManager : MonoBehaviour
     {
         guard.HideDialogue(dialogueObject);
     }
+
+    public void OnPlayerPanelButtonClick()
+    {
+        playerPanelAnim.SetBool("ShouldOpen", !playerPanelAnim.GetBool("ShouldOpen"));
+    }
+
+    private IEnumerator Wait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+    }
+
+    public IEnumerator ShowPopup(float seconds, GameObject popup)
+    { 
+        popup.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        popup.SetActive(false);
+    }
+
+    #endregion
 }

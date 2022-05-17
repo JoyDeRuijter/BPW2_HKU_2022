@@ -12,21 +12,17 @@ public class Player : Unit
     [Space(10)]
     [SerializeField] private SkinnedMeshRenderer character;
 
-    private int index = 0;
     [HideInInspector] public int stamina = 100;
     [HideInInspector] public int experience = 0;
     [HideInInspector] public int coins = 0;
-
     [HideInInspector] public float timerValue = 50f;
-
-    public bool isInRoom;
+    [HideInInspector] public bool isInRoom;
 
     #endregion
 
     public override void Update()
     {
         base.Update();
-
         StaminaRegeneration();
     }
 
@@ -91,6 +87,8 @@ public class Player : Unit
         uiManager.AddCoinObject();
     }
 
+    #region Add Functions
+
     public void AddExperience(int xp)
     {
         if (experience + xp <= 100)
@@ -120,6 +118,8 @@ public class Player : Unit
 
         uiManager.UpdateStaminaBar();
     }
+
+    #endregion
 
     public bool IsInRoom()
     {

@@ -1,15 +1,11 @@
 // Written by Joy de Ruijter
 using UnityEngine;
 
-//TODO: MAKE THE ENEMY ONLY MOVE WHEN THEY ARE IN THE SAME ROOM AS THE PLAYER
-//      BEST DO THAT IN THE STATEMACHINE, SINCE THEY SHOULDN'T EVEN GET A TURN WHEN THEY ARE NOT IN THE SAME ROOM
-
 public class Enemy : Unit
 {
     #region Variables
 
     [HideInInspector] public EnemyType enemyType;
-    //[HideInInspector] public int roomID;
 
     #endregion
 
@@ -91,7 +87,6 @@ public class Enemy : Unit
         else
             return false;
     }
-
 }
 
 public enum EnemyType { Normal, Boss}

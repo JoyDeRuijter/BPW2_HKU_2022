@@ -6,27 +6,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    #region Variables
-
-    [Header("References")]
-    [SerializeField] private Camera mainCamera;
-
-    [HideInInspector] public Tile selectedTile;
-    [HideInInspector] public Tile lastClickedTile;
-    [HideInInspector] public GameState gameState;
-
-    private Tile previouslySelectedTile;
-    [HideInInspector] public Player player;
-    private List<Unit>units = new List<Unit>();
-    public List<Enemy>enemies = new List<Enemy>();
-    public List<Enemy>enemiesInRoom = new List<Enemy>();
-    [HideInInspector] public List<Tile>tiles = new List<Tile>();
-    private int beginIndex;
-    [HideInInspector] public Dungeon.DungeonGenerator dungeonGenerator;
-    private int activeEnemy;
-
-    #endregion
-
     #region Singleton
 
     public static GameManager instance;
@@ -37,6 +16,27 @@ public class GameManager : MonoBehaviour
         player = FindObjectOfType<Player>();
         dungeonGenerator = FindObjectOfType<Dungeon.DungeonGenerator>();
     }
+
+    #endregion
+
+    #region Variables
+
+    [Header("References")]
+    [SerializeField] private Camera mainCamera;
+
+    [HideInInspector] public Tile selectedTile;
+    [HideInInspector] public Tile lastClickedTile;
+    [HideInInspector] public GameState gameState;
+
+    private Tile previouslySelectedTile;
+    private List<Unit>units = new List<Unit>();
+    private int beginIndex;
+    private int activeEnemy;
+    public List<Enemy>enemies = new List<Enemy>();
+    public List<Enemy>enemiesInRoom = new List<Enemy>();
+    [HideInInspector] public Player player;
+    [HideInInspector] public List<Tile>tiles = new List<Tile>();
+    [HideInInspector] public Dungeon.DungeonGenerator dungeonGenerator;
 
     #endregion
 
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < units.Count; i++)
         {
-            if (units[i].TryGetComponent<Player>(out Player player))
+            if (units[i].TryGetComponent<Player>(out _))
                 beginIndex = i;
         }
         units[beginIndex].unitState = Unit.UnitStates.StartTurn;
@@ -75,7 +75,6 @@ public class GameManager : MonoBehaviour
 
     public void SwitchTurnState()
     {
-
         if (gameState == GameState.PlayerTurn)
         {
             activeEnemy = 0;
@@ -198,7 +197,6 @@ public class GameManager : MonoBehaviour
             if (enemiesInRoom[i].xPos == tile.xPos && enemiesInRoom[i].yPos == tile.yPos)
                 return enemiesInRoom[i].name;
         }
-        // check for items/obstacles/e.g.
 
         return "Empty";
     }
@@ -218,21 +216,6 @@ public class GameManager : MonoBehaviour
             }
         }
         return null;
-    }
-
-    public void UpdateUnitAndEnemyLists() // Very performance heavy, only use when you have no other choice
-    { 
-        units.Clear();
-        enemies.Clear();
-        enemiesInRoom.Clear();
-        units = FindObjectsOfType<Unit>().Select(unit => unit).ToList();
-        foreach (Unit unit in units)
-        {
-            if (unit.gameObject.TryGetComponent<Player>(out Player player))
-                continue;
-            enemies.Add(unit.gameObject.GetComponent<Enemy>());
-            enemiesInRoom.Add(unit.gameObject.GetComponent<Enemy>());
-        }
     }
 
     public void RemoveEnemyFromLists(Enemy enemy)

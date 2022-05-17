@@ -35,9 +35,7 @@ namespace Dungeon
 
         public Dictionary<Vector3Int, TileType> dungeon = new Dictionary<Vector3Int, TileType>();
         public List<Room> rooms = new List<Room>();
-
         [HideInInspector] public GameObject player;
-        
 
         #endregion
 
@@ -51,10 +49,10 @@ namespace Dungeon
             AllocateGuard();
         }
 
+        #region Dungeon
+
         public void Generate()
         {
-            // Doors?
-
             for (int i = 0; i < numberOfRooms; i++)
             {
                 int minX = Random.Range(0, gridWidth);
@@ -132,7 +130,7 @@ namespace Dungeon
             Vector3Int posTwo = _roomTwo.GetCenter();
 
             int dirX = posTwo.x > posOne.x ? 1 : -1;
-            int x = 0;
+            int x;
             for (x = posOne.x; x != posTwo.x; x += dirX)
             {
                 Vector3Int position = new Vector3Int(x, posOne.y, 0);
@@ -175,7 +173,7 @@ namespace Dungeon
                     case TileType.Wall:
                         Vector3Int wallPosition = new Vector3Int(kvp.Key.x, kvp.Key.y, 0);
                         var spawnedWalltile = Instantiate(wallPrefab, wallPosition, Quaternion.identity, transform);
-                        spawnedWalltile.name = "FloorTile_" + kvp.Key.x + "_" + kvp.Key.y;
+                        spawnedWalltile.name = "WallTile_" + kvp.Key.x + "_" + kvp.Key.y;
                         spawnedWalltile.Initialize(false);
                         break;
 
@@ -188,6 +186,10 @@ namespace Dungeon
                 }
             }
         }
+
+        #endregion
+
+        #region Allocation Other Entities
 
         private void AllocateCamera()
         {
@@ -258,6 +260,10 @@ namespace Dungeon
             rooms[rooms.Count - 1].occupiedTiles.Add(startPos); ;
         }
 
+        #endregion
+
+        #region Helper Functions
+
         private bool RoomTileIsOccupied(Room room, Vector3Int pendingPosition)
         {
             if (room.occupiedTiles.Count == 0)
@@ -271,7 +277,6 @@ namespace Dungeon
             return false;
         }
 
-        //WAS WORKING HERE!!
         public int UnitRoomID(Unit unit)
         {
            Vector3Int unitPosition = new Vector3Int(unit.xPos, unit.yPos, 0);
@@ -287,6 +292,7 @@ namespace Dungeon
             return -1;
         }
 
+        #endregion
     }
 
     public class Room
@@ -294,8 +300,9 @@ namespace Dungeon
         #region Variables
 
         public int ID;
-
         public int minX, maxX, minY, maxY;
+        public List<Vector3Int> occupiedTiles = new List<Vector3Int>();
+        public List<Vector3Int> potionPositions = new List<Vector3Int>();
 
         public Room(int _minX, int _maxX, int _minY, int _maxY)
         {
@@ -305,10 +312,9 @@ namespace Dungeon
             maxY = _maxY;
         }
 
-        public List<Vector3Int> occupiedTiles = new List<Vector3Int>();
-        public List<Vector3Int> potionPositions = new List<Vector3Int>();
-
         #endregion
+
+        #region Get Tile Functions
 
         public Vector3Int GetCenter()
         {
@@ -319,6 +325,10 @@ namespace Dungeon
         {
             return new Vector3Int(Mathf.RoundToInt(Random.Range(minX, maxX + 1)), Mathf.RoundToInt(Random.Range(minY, maxY + 1)), 0);
         }
+
+        #endregion
+
+        #region Other Functions
 
         public bool HasThisTile(int xPos, int yPos)
         {
@@ -351,6 +361,8 @@ namespace Dungeon
                     potionPositions.Remove(potionPositions[i]);
             }
         }
+
+        #endregion
     }
 }
 

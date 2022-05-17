@@ -5,7 +5,9 @@ public class Potion : MonoBehaviour
 {
     #region Variables
 
+    [Header("Potion Item")]
     [SerializeField] PotionItem potionItem;
+
     [HideInInspector] public int roomID;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;

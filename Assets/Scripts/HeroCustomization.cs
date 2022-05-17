@@ -127,7 +127,6 @@ public class HeroCustomization : MonoBehaviour
         camWeaponObjects[weaponIndex].SetActive(true);
 
         weaponName.text = weaponNames[weaponIndex].ToUpper();
-
     }
 
     public void UpdateName()

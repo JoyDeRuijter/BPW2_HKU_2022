@@ -5,10 +5,11 @@ using UnityEngine;
 public class PotionItem : ScriptableObject
 {
     #region Variables
-
+    
     public enum PotionType { Health, Experience, Stamina }
-    public PotionType potionType;
 
+    [Header("Potion Type")]
+    public PotionType potionType;
     new public string name = "Insert Item Name";
     public Sprite icon = null;
 
@@ -36,7 +37,6 @@ public class PotionItem : ScriptableObject
             default:
                 break;
         }
-
         Inventory.instance.Remove(this);
     }
 

@@ -28,28 +28,6 @@ public class Guard : MonoBehaviour
             hasShowedDialogue = false;
     }
 
-    private void LookAtPlayer()
-    {
-        Vector3 playerPosition = new Vector3(gameManager.player.xPos, gameManager.player.yPos, 6f);
-        Vector3 lookDirection = (playerPosition - transform.position).normalized;
-        switch (lookDirection)
-        {
-            case Vector3 v when v.Equals(Vector3.up):
-                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, 0f), 6f);
-                break;
-            case Vector3 v when v.Equals(Vector3.down):
-                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, 180f), 6f);
-                break;
-            case Vector3 v when v.Equals(Vector3.right):
-                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, -90f), 6f);
-                break;
-            case Vector3 v when v.Equals(Vector3.left):
-                transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, new Vector3(0f, 0f, 90f), 6f);
-                break;
-
-        }
-    }
-
     private void ShowDialogue()
     {
         if (gameManager.player.coins < 10)

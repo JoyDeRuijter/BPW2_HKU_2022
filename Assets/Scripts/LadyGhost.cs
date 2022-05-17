@@ -24,6 +24,5 @@ public class LadyGhost : MonoBehaviour
 
         if (transform.position.y >= 2.5f)
             uiManager.PlayScene("EndTitle");
-
     }
 }

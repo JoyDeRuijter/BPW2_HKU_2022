@@ -6,6 +6,7 @@ public class InventorySlot : MonoBehaviour
 {
     #region Variables
 
+    [Header("Properties")]
     public PotionItem potionItem;
     public Image icon;
     public Button removeButton;

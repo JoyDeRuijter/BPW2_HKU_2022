@@ -17,14 +17,14 @@ public class Unit : MonoBehaviour
     [SerializeField] private Outline outliner;
     [SerializeField] private Animator anim;
 
-    public int currentHealth;
+    [HideInInspector] public int currentHealth;
     [HideInInspector] public int xPos;
     [HideInInspector] public int yPos;
     [HideInInspector] public Vector3Int targetPosition;
     [HideInInspector] public bool isMoving;
     [HideInInspector] public bool doingAction;
-    public UnitStates unitState;
-    public bool completedAction;
+    [HideInInspector] public UnitStates unitState;
+    [HideInInspector] public bool completedAction;
 
     [HideInInspector] public UIManager uiManager;
     [HideInInspector] public GameManager gameManager;
@@ -116,7 +116,6 @@ public class Unit : MonoBehaviour
         Rotate(lookPosition);
         doingAction = true;
         StartCoroutine(DamageDelay(1f, attacker, victim));
-        //Debug.Log("!SLAASHH! " + attacker.name + " just attacked " + victim.name);
         StartCoroutine(AttackDelay(2f));
     }
 
@@ -152,18 +151,13 @@ public class Unit : MonoBehaviour
     private IEnumerator DamageDelay(float seconds, Unit attacker, Unit victim)
     {
         yield return new WaitForSeconds(seconds);
-        //Debug.Log("DAMAGEDELAY: " + attacker.name + " does " + attacker.damage + " to " + victim.name + " with " + victim.currentHealth);
         if (victim.currentHealth - attacker.damage <= 0)
         {
-            //Debug.Log("unity thinks " + victim.gameObject.name + " should die?");
             victim.currentHealth = 0;
             Die(victim);
         }
         else
-        {
             victim.TakeDamage(attacker.damage);
-            //Debug.Log("unity thinks " + victim.gameObject.name + " should get " + attacker.damage + " damage");
-        }
     }
 
     #endregion

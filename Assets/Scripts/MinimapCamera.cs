@@ -17,7 +17,6 @@ public class MinimapCamera : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.instance;
-        
     }
 
     private void Update()
