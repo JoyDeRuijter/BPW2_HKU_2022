@@ -8307,8 +8307,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorPrefab: {fileID: 6676919344204001648, guid: ce8d4948ab1cbcb46a55e8183481c960, type: 3}
   wallPrefab: {fileID: 6676919344204001648, guid: de85295a0c204d54f82bac42bd154ba0, type: 3}
-  gridWidth: 40
-  gridHeight: 60
+  gridWidth: 30
+  gridHeight: 30
   minRoomSize: 4
   maxRoomSize: 8
   numberOfRooms: 6

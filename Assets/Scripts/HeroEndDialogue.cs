@@ -32,7 +32,7 @@ public class HeroEndDialogue : MonoBehaviour
         }
         else
         { 
-            text.text = "Because of your bravery, " + playerData.heroName + " got to say his last words to their deceased lover. \n He is forever grateful < 3";
+            text.text = "Because of your bravery, " + playerData.heroName + " got to say their last words to their deceased lover. \n They are forever grateful <3";
         }
     }
 }
