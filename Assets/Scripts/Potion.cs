@@ -25,9 +25,6 @@ public class Potion : MonoBehaviour
     {
         if (other.gameObject.GetComponentInChildren<Player>() == null)
             return;
-
-        Debug.Log("Player collected a " + potionItem.potionType + " potion");
-
         PickUp();
     }
 

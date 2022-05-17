@@ -323,6 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00191952e0589fd45ace1d37cb8db044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tempData: 
 --- !u!4 &350576813
 Transform:
   m_ObjectHideFlags: 0
@@ -4210,7 +4211,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Game
+          m_StringArgument: Intro
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &731677458
@@ -4770,10 +4771,23 @@ MonoBehaviour:
   staminaBar: {fileID: 0}
   healthBar: {fileID: 0}
   HeroImage: {fileID: 0}
+  weaponImage: {fileID: 0}
   HeroShots: []
+  weaponShots: []
+  materials: []
+  coinObjects: []
+  coinCounter: {fileID: 0}
   clickSound: {fileID: 0}
   healButton: {fileID: 0}
   damageButton: {fileID: 0}
+  heroName: {fileID: 0}
+  playerCharacter: {fileID: 0}
+  itemsParent: {fileID: 0}
+  potionPopupHealth: {fileID: 0}
+  potionPopupExperience: {fileID: 0}
+  potionPopupStamina: {fileID: 0}
+  acquireDialogue: {fileID: 0}
+  giveDialogue: {fileID: 0}
 --- !u!1 &1145747117
 GameObject:
   m_ObjectHideFlags: 0
